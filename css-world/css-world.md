@@ -91,4 +91,89 @@ margin/border/padding和content内容区域自动分配水平空间的机制
 
 ## box-sizing
 
-[文本域textarea的100%自适应父容器宽度。](http://jsrun.net/JRIKp/edit)
+[文本域textarea的100%自适应父容器宽度。](http://jsrun.net/JRIKp/edit) 局限：如无法使用:focus高亮父级的边 框，因为CSS世界中并无父选择器，只能使用更复杂的嵌套加其他CSS 技巧来模拟。
+
+比*{box-sizing:borderbox}更合理的重置
+
+```css
+input, textarea, img, video, object {
+box-sizing: border-box;
+}
+
+```
+
+## height:100%无效
+
+[width:100%与不存在死循环佐证实例](http://jsrun.net/GRIKp/edit)
+
+**height:100% 的解释**：如果包含块的高度没有显式指定（即高度由内容决定），并且 该元素不是绝对定位，则计算值为auto。
+
+**width:100%的解释**:如果包含块的宽度取决于该元素的宽度，那么 产生的布局在CSS 2.1中是未定义的。
+
+**使元素支持height:100%效果**
+
+1. 设定显示的高度值。
+
+   ```css
+   html,body{
+   	height:100%
+   }
+   ```
+
+   
+
+2. 使用绝对定位
+
+   ```css
+   div{
+       height:100%;
+       position:absolute;
+   }
+   ```
+
+   
+
+3. 绝对定位元素的百分比计算和非绝对 定位元素的百分比计算是有区别的，区别在于绝对定位的宽高百分比计 算是相对于padding box的，也就是说会把padding大小值计算在内，但 是，非绝对定位元素则是相对于content box计算的。[绝对定位和非绝对定位元素百分比值计算区别](http://jsrun.net/HRIKp/edit)
+
+4. **总结**
+
+   显式高度方法中规中 矩，意料之中；绝对定位方法剑走偏锋，支持隐式高度计算，给人意外 之喜
+
+   [任意大小图片的左右半区布局实例](http://jsrun.net/5RIKp/edit)
+
+## min-width/max-width和minheight/max-height
+
+```css
+//1200~1400
+.container{
+	min-width:1200px;
+	max-width:1400px;
+}
+//图片
+img{
+    max-width:100%;
+    height:auto !important;
+}
+/**height:auto是必需的，否则，如果原始图片有设定
+height，max-width生效的时候，图片就会被水平压缩。强制height
+为auto可以确保宽度不超出的同时使图片保持原来的比例。但这样也会
+有体验上的问题，那就是在加载时图片占据高度会从0变成计算高度，
+图文会有明显的瀑布式下落*/
+```
+
+1. 初始值
+
+   - width/height默认值是auto
+   - max-*和min-\*系列
+     - max-width和max-height初始值是none,min-width和min-height是auto
+
+2. 超越important，max-width大于imporant
+
+3. 超越最大，min-width覆盖max-width
+
+4. 一个高度不定的任意元素的展开动画效果
+
+   [max-height与任意高度元素滑动展开收起效果](http://jsrun.net/tRIKp/edit)
+
+5. 如果max-height值太大，在收起 的时候可能会有“效果延迟”的问题，比方说，我们展开的元素高度是 100像素，而max-height是1000像素，动画时间是250 ms，假设我们动 画函数是线性的，则前225 ms我们是看不到收起效果的，因为maxheight从1000像素到100像素变化这段时间，元素不会有区域被隐藏， 会给人动画延迟225 ms的感觉，建议 max-height 使用足够安全的最小值，
+
