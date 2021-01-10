@@ -187,3 +187,5 @@ height，max-width生效的时候，图片就会被水平压缩。强制height
 
 [content图片尺寸不受width/height限制实例](http://jsrun.net/JuIKp/edit)
 
+[src缺省时img元素的alt信息展示技术实例](http://jsrun.net/xuIKp/edit)
+
