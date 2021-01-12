@@ -80,9 +80,20 @@ div,span::-webkit-whatever{
 
 5级别 !important
 
-# 3.
+# 3.CSS优先级
 
 ```
-
+//重复选择器本身
+.foo .foo{}
+//属性选择器
+.foo[class]{}
+#foo[id]{}
 ```
 
+# 4.选择器大小写
+
+在]前面加i，表示大小写不敏感
+
+# 5.选择器命名合法性
+
+类名和ID选择器可以有数字开发，需要转译为Unicode值
