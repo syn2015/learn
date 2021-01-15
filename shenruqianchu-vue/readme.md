@@ -25,7 +25,7 @@ function defineReactive (data, key, val) {
       }
   });
 }
-//在getter中收集依赖，在setter中触发依赖
+//object.defineProperty将属性转换成getter和setter的形式来追踪变换，在getter中收集依赖，在setter中触发依赖
 ```
 
 Dep类
