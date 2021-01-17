@@ -179,7 +179,106 @@
 
 ## traceul转码器
 
+traceur（Google）,必须在头部加载traceul库文件
+
+```javascript
+<script src=” https://google . github . io/traceur-compiler..」
+/bin / traceur . js ” ></script>
+<script src=” https : //google . github . io / traceur-compiler,_i
+/bin/BrowserSystem.j s ” ></ s cript>
+<script src=” https : //google . github . io/traceur-compiler,_i
+/src / bootstrap.j s ” ></script>
+<script type=” module ” >
+import ’. / Greeter.js ’;
+</script>
+//第一个用来加载traceul文件，第二三个用于浏览器环境。第一个用来加载es6代码(type为module，实别ES6代码的标志)
+// 也可以直接在页面中放置ES6代码
+```
+
+![](./traceul.png)
+
+traceur的全局对象。system.import加载ES6,配置对象metadata.traceurOptions属性配置支持ES6.
+
+experimental:true.表示除了ES6外还支持一些实验性新功能。
+
+1. 命令行转换
+   - npm i -g traceul
+   - traceul --script  ES6.js --out calc.es5.js  //指定输入输出，--experimental选项支持更多新特性
+2. Node环境的用法
+   - ![](traceul-node.png)
+
 # Let和const
+
+块级作用域
+
+```javascript
+
+```
+
+对象冻结，Object.freeze();
+
+```javascript
+const foo = Object.freeze({});
+
+// 常规模式时，下面一行不起作用；
+// 严格模式时，该行会报错
+foo.prop = 123;
+//常量foo指向一个冻结的对象，所以添加新属性不起作用，严格模式时还会报错。
+```
+
+对象的属性冻结
+
+```javascript
+var constantize = (obj) => {
+  Object.freeze(obj);
+  Object.keys(obj).forEach( (key, i) => {
+    if ( typeof obj[key] === 'object' ) {
+      constantize( obj[key] );
+    }
+  });
+};
+```
+
+顶级对象的属性
+
+```javascript
+var a = 1;
+// 如果在 Node 的 REPL 环境，可以写成 global.a
+// 或者采用通用方法，写成 this.a
+window.a // 1
+
+let b = 1;
+window.b // undefined
+//全局变量a由var命令声明，所以它是顶层对象的属性；全局变量b由let命令声明，所以它不是顶层对象的属性，返回undefined。
+```
+
+globalThis对象
+
+```javascript
+JavaScript 语言存在一个顶层对象，它提供全局环境（即全局作用域），所有代码都是在这个环境中运行。但是，顶层对象在各种实现里面是不统一的。
+//在所有情况下，都取到顶层对象
+// 方法一
+(typeof window !== 'undefined'
+   ? window
+   : (typeof process === 'object' &&
+      typeof require === 'function' &&
+      typeof global === 'object')
+     ? global
+     : this);
+
+// 方法二
+var getGlobal = function () {
+  if (typeof self !== 'undefined') { return self; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  throw new Error('unable to locate global object');
+};
+//ES2020 在语言标准的层面，引入globalThis作为顶层对象。也就是说，任何环境下，globalThis都是存在的，都可以从它拿到顶层对象，指向全局环境下的this。
+
+垫片库global-this模拟了这个提案，可以在所有环境拿到globalThis。
+```
+
+
 
 # 变量解构和赋值
 
