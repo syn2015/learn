@@ -282,6 +282,145 @@ var getGlobal = function () {
 
 # 变量解构和赋值
 
+ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。
+
+```javascript
+//基本用法
+let [x, y, ...z] = ['a'];
+x // "a"
+y // undefined
+z // []
+
+//如果解构不成功，变量的值就等于undefined。
+// foo的值都会等于undefined。
+let [foo] = [];
+let [bar, foo] = [1];
+
+// 不完全解构
+let [x, y] = [1, 2, 3];
+x // 1
+y // 2
+
+let [a, [b], d] = [1, [2, 3], 4];
+a // 1
+b // 2  ，这里就是拿了第一个
+d // 4
+
+//如果等号的右边不是数组（或者严格地说，不是可遍历的结构，参见《Iterator》一章），那么将会报错。
+//等号右边的值，要么转为对象以后不具备 Iterator 接口（前五个表达式），要么本身就不具备 Iterator 接口（最后一个表达式）。
+// 报错
+let [foo] = 1;
+let [foo] = false;
+let [foo] = NaN;
+let [foo] = undefined;
+let [foo] = null;
+let [foo] = {};
+
+
+
+// Set 结构，也可以使用数组的解构赋值。
+let [x, y, z] = new Set(['a', 'b', 'c']);
+x // "a"
+
+//事实上，只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值。
+//fibs是一个 Generator 函数（参见《Generator 函数》一章），原生具有 Iterator 接口。解构赋值会依次从这个接口获取值。
+function* fibs() {
+  let a = 0;
+  let b = 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+let [first, second, third, fourth, fifth, sixth] = fibs();
+sixth // 5
+```
+
+
+
+```javascript
+//默认值
+//解构赋值允许指定默认值。
+//ES6 内部使用严格相等运算符（===），判断一个位置是否有值。所以，只有当一个数组成员严格等于undefined，默认值才会生效。
+let [x = 1] = [undefined];
+x // 1
+
+let [x = 1] = [null];
+x // null
+
+
+
+//默认值是一个表达式，那么这个表达式是惰性求值的，即只有在用到的时候，才会求值。
+function f() {
+  console.log('aaa');
+}
+
+let [x = f()] = [1];
+//因为x能取到值，所以函数f根本不会执行。上面的代码其实等价于下面的代码。
+let x;
+if ([1][0] === undefined) {
+  x = f();
+} else {
+  x = [1][0];
+}
+
+
+//默认值可以引用解构赋值的其他变量，但该变量必须已经声明。
+let [x = 1, y = x] = [];     // x=1; y=1
+let [x = 1, y = x] = [2];    // x=2; y=2
+let [x = 1, y = x] = [1, 2]; // x=1; y=2
+let [x = y, y = 1] = [];     // ReferenceError: y is not defined
+//最后一个表达式之所以会报错，是因为x用y做默认值时，y还没有声明。
+```
+
+
+
+
+
+```javascript
+//对象的解构赋值
+//对象的解构与数组有一个重要的不同。数组的元素是按次序排列的，变量的取值由它的位置决定；而对象的属性没有次序，变量必须与属性同名，才能取到正确的值。
+//如果解构失败，变量的值等于undefined。
+
+//将现有对象的方法，赋值某个变量上
+let { log, sin, cos } = Math;
+const { log } = console;
+log('hello') // hello
+// 如果变量名与属性名不一致，必须写成下面这样。
+let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
+baz // "aaa"
+
+let obj = { first: 'hello', last: 'world' };
+let { first: f, last: l } = obj;
+f // 'hello'
+l // 'world'
+// 原理，对象的解构赋值的内部机制，是先找到同名属性，然后再赋给对应的变量。真正被赋值的是后者，而不是前者。
+let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
+baz // "aaa"
+foo // error: foo is not defined
+//foo是匹配的模式，baz才是变量。真正被赋值的是变量baz，而不是模式foo。
+
+
+const node = {
+  loc: {
+    start: {
+      line: 1,
+      column: 5
+    }
+  }
+};
+
+let { loc, loc: { start }, loc: { start: { line }} } = node;
+line // 1
+loc  // Object {start: Object}
+start // Object {line: 1, column: 5}
+
+//上面代码有三次解构赋值，分别是对loc、start、line三个属性的解构赋值。注意，最后一次对line属性的解构赋值之中，只有line是变量，loc和start都是模式，不是变量。
+```
+
+
+
 # 字符串的扩展
 
 # 正则的扩展
