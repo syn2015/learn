@@ -423,6 +423,93 @@ start // Object {line: 1, column: 5}
 
 # 字符串的扩展
 
+## 字符的 Unicode 表示法
+
+ES6以后JavaScript 共有 6 种方法可以表示一个字符。
+
+```javascript
+'\z' === 'z'  // true
+'\172' === 'z' // true
+'\x7A' === 'z' // true
+'\u007A' === 'z' // true
+'\u{7A}' === 'z' // true
+```
+
+## 字符串的遍历器接口 
+
+```javascript
+//字符串可以被for...of循环遍历。可以识别大于0xFFFF的码点，传统的for循环无法识别这样的码点。
+for (let codePoint of 'foo') {
+  console.log(codePoint)
+}
+```
+
+## JavaScript 字符串允许直接输入字符，以及输入字符的转义形式。
+
+```javascript
+'中' === '\u4e2d' // true
+
+//JavaScript 规定有5个字符，不能在字符串里面直接使用，只能使用转义形式。
+U+005C：反斜杠（reverse solidus)
+U+000D：回车（carriage return）
+U+2028：行分隔符（line separator）
+U+2029：段分隔符（paragraph separator）
+U+000A：换行符（line feed）
+
+
+// JSON 格式允许字符串里面直接使用 U+2028（行分隔符）和 U+2029（段分隔符）。
+const json = '"\u2028"';
+JSON.parse(json); // 可能报错
+
+//为了消除这个报错，ES2019 允许 JavaScript 字符串直接输入 U+2028（行分隔符）和 U+2029（段分隔符）。
+const PS = eval("'\u2029'"); //true
+
+
+//模板字符串现在就允许直接输入这两个字符。另外，正则表达式依然不允许直接输入这两个字符，
+```
+
+## JSON-stringify-的改造
+
+根据标准，JSON 数据必须是 UTF-8 编码.为了确保返回的是合法的 UTF-8 字符，[ES2019](https://github.com/tc39/proposal-well-formed-stringify) 改变了`JSON.stringify()`的行为。如果遇到`0xD800`到`0xDFFF`之间的单个码点，或者不存在的配对形式，它会返回转义字符串，留给应用自己决定下一步的处理。
+
+```javascript
+JSON.stringify('\u{D834}') // "\u{D834}"
+
+
+
+JSON.stringify('\u{D834}') // ""\\uD834""
+JSON.stringify('\uDF06\uD834') // ""\\udf06\\ud834""
+```
+
+## 模板字符串
+
+在模板字符串中需要使用反引号，则前面要用反斜杠转义。
+
+表示多行字符串，所有的空格和缩进都会被保留在输出之中.trim()可以消除换行
+
+大括号内部可以放入任意的 JavaScript 表达式，可以进行运算，以及引用对象属性。
+
+模板字符串之中还能调用函数。
+
+如果大括号中的值不是字符串，将按照一般的规则转为字符串。toString()
+
+模板字符串甚至还能嵌套。
+
+
+
+```javascript
+let greeting = `\`Yo\` World!`;
+//如果需要引用模板字符串本身，在需要时执行，可以写成函数。
+let func = (name) => `Hello ${name}!`;
+func('Jack') // "Hello Jack!"
+```
+
+## 实例：模板编译
+
+## 标签模板
+
+## 模板字符串的限制
+
 # 正则的扩展
 
 # 数值扩展
