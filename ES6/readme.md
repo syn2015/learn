@@ -506,9 +506,49 @@ func('Jack') // "Hello Jack!"
 
 ## 实例：模板编译
 
+
+
 ## 标签模板
 
+
+
 ## 模板字符串的限制
+
+
+
+# 字符串的新增方法
+
+## String.fromCodePoint()
+
+ES5 提供`String.fromCharCode()`方法（**实例对象上**），用于从 Unicode 码点返回对应字符，但是这个方法不能识别码点大于`0xFFFF`的字符。
+
+ES6 提供了`String.fromCodePoint()`方法(定义在**String对象上**)，可以识别大于`0xFFFF`的字符，弥补了`String.fromCharCode()`方法的不足。在作用上，正好与下面的`codePointAt()`方法相反。如果`String.fromCodePoint`方法有多个参数，则它们会被合并成一个字符串返回。
+
+## String.raw()
+
+`String.raw()`方法可以作为处理模板字符串的基本方法，它会将所有变量替换，而且对斜杠进行转义，方便下一步作为字符串来使用。
+
+## 实例方法codePointAt()
+
+JavaScript 内部，字符以 UTF-16 的格式储存，每个字符固定为`2`个字节。对于那些需要`4`个字节储存的字符（Unicode 码点大于`0xFFFF`的字符），JavaScript 会认为它们是两个字符。
+
+ES6 提供了`codePointAt()`方法，能够正确处理 4 个字节储存的字符，返回一个字符的码点。
+
+`codePointAt()`方法返回的是码点的十进制值，如果想要十六进制的值，可以使用`toString()`方法转换一下。
+
+## 实例方法normalize()
+
+## 实例方法includes()，startsWith(),endWith()
+
+## 实例方法repeat()
+
+## 实例方法padStart(),padEnd()
+
+## 实例方法trimStart(),trimEnd()
+
+## 实例方法matchAll()
+
+## 实例方法replaceAll()
 
 # 正则的扩展
 
