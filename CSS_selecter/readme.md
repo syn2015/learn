@@ -197,5 +197,17 @@ div,span::-webkit-whatever{
   1. 以val开头或者varl加上短横线-连接的形式
   2. :lang伪类元素
 
-## 属性值直接匹配选择器
+## 属性值正则匹配选择器
+
+- [attr^="val"]  前字符匹配
+  1. 可以匹配中文。中文不包含特殊字符，如空格等。中文外面引号可以省略
+  2. 空字符无效
+- [attr$="val"]   后字符匹配
+- [attr*="val"]    任意字符匹配
+  1. [style*="display: none"]{} 元素是否隐藏
+  2. JS给DOM元素设置样式会出现美化的空格，改进：[style*="display: none"]{} 元素是否隐藏
+  3. 手写的style值，而且没有空格，在chrome和firefox下需要严格按照手写 [style*="display:none"]{} 元素是否隐藏
+  4. IE的自动格式化HTML属性值，需要兼容写法：[style*="display: none"]，[style*="display:none"] {}
+  5. 兼容IE8的写法：省略
+  6. IOS下的微信浏览器私自增加了前缀，倒是匹配异常
 
