@@ -236,3 +236,17 @@ div,span::-webkit-whatever{
 [hover显示,增加:focus优化体验](https://demo.cssworld.cn/selector/7/1-4.php)
 
 [整体焦点伪类](https://demo.cssworld.cn/selector/.php)
+
+## :active
+
+IE下:active样式应用是无法冒泡的
+
+IE下，html和body应用:active伪类设置背景色后，背景色无法还原
+
+移动端下safari浏览器：active伪类无效，需要设置任意的touch事件才支持。推荐使用原生-webkit-tap-highlight-color触发高亮反馈更好
+
+## :active通用技巧
+
+box-shadow内阴影，outline方式
+
+## :active伪类与CSS数据上报
