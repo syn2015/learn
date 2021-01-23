@@ -211,3 +211,10 @@ div,span::-webkit-whatever{
   5. 兼容IE8的写法：省略
   6. IOS下的微信浏览器私自增加了前缀，倒是匹配异常
 
+## CSS属性选择器搜索过滤
+
+[搜索过滤](https://demo.cssworld.cn/selector/6/3-1.php)
+
+## 忽略属性值大小写的正则匹配运算符
+
+**使用I或者i**
