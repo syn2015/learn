@@ -218,3 +218,21 @@ div,span::-webkit-whatever{
 ## 忽略属性值大小写的正则匹配运算符
 
 **使用I或者i**
+
+#　七 用户行为伪类
+
+## :hover延迟
+
+[hover延迟](https://demo.cssworld.cn/selector/7/1-1.php)
+
+## 非子元素的:hover显示
+
+[hover显示](https://demo.cssworld.cn/selector/7/1-2.php)
+
+[出现间隙时hover显示](https://demo.cssworld.cn/selector/7/1-3.php)
+
+## 纯:hover显示浮层的体验问题
+
+[hover显示,增加:focus优化体验](https://demo.cssworld.cn/selector/7/1-4.php)
+
+[整体焦点伪类](https://demo.cssworld.cn/selector/.php)
