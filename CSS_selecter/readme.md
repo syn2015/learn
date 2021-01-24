@@ -30,6 +30,8 @@ svg|a { color: black; fill: currentColor; }
 a { color: gray; }
 ```
 
+xmlns属性值对应的url地址就是一个简单的命名空间名称，并不指向实际的在线地址。
+
 ## 无效CSS选择器
 
 ```css
@@ -154,6 +156,10 @@ div,span::-webkit-whatever{
 
 相邻兄弟选择器只匹配后面的第一个兄弟元素，随后兄弟选择器匹配后面所有兄弟元素。
 
+# 11.CSS选择器的作用域名
+
+局部作用域，:scope{}伪类虽然可以解析但是只能当作全局作用域，在JS当中还是有效的。局部作用域在Shadow DOM中是有效的
+
 # 六 属性选择器
 
 ## ID选择器
@@ -250,3 +256,5 @@ IE下，html和body应用:active伪类设置背景色后，背景色无法还原
 box-shadow内阴影，outline方式
 
 ## :active伪类与CSS数据上报
+
+## :focus
