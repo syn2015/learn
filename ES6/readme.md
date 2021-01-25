@@ -748,7 +748,7 @@ ES6 对正则表达式添加了`u`修饰符，含义为“Unicode 模式”，�
 /^\uD83D/.test('\uD83D\uDC2A') // true
 ```
 
-## ## RegExp.prototype.unicode 属性
+## RegExp.prototype.unicode 属性
 
 正则实例对象新增`unicode`属性，表示是否设置了`u`修饰符。
 
@@ -759,6 +759,85 @@ ES6 还为正则表达式添加了`y`修饰符，叫做“粘连”（sticky）�
 与`g`修饰符类似，也是全局匹配，后一次匹配都从上一次匹配成功的下一个位置开始。不同之处在于，`g`修饰符只要剩余位置中存在匹配就可，而`y`修饰符确保匹配必须从剩余的第一个位置开始，这也就是“粘连”的涵义。
 
 # 数值扩展
+
+## 二进制和八进制表示法
+
+ES6 提供了二进制和八进制数值的新的写法，分别用前缀`0b`（或`0B`）和`0o`（或`0O`）表示。
+
+从 ES5 开始，在严格模式之中，八进制就不再允许使用前缀`0`表示，ES6 进一步明确，要使用前缀`0o`表示。
+
+如果要将`0b`和`0o`前缀的字符串数值转为十进制，要使用`Number`方法。
+
+```javascript
+Number('0b111')  // 7
+Number('0o10')  // 8
+```
+
+## Number.isFinite(),Number.isNaN()
+
+ES6 在`Number`对象上，新提供了`Number.isFinite()`和`Number.isNaN()`两个方法。
+
+`Number.isFinite()`用来检查一个数值是否为有限的（finite），即不是`Infinity`。
+
+如果参数类型不是数值，`Number.isFinite`一律返回`false`。
+
+
+
+`Number.isNaN()`用来检查一个值是否为`NaN`。如果参数类型不是`NaN`，`Number.isNaN`一律返回`false`。
+
+```javascript
+Number.isNaN(9/NaN) // true
+Number.isNaN('true' / 0) // true
+Number.isNaN('true' / 'true') // true
+```
+
+与传统的全局方法`isFinite()`和`isNaN()`的区别在于，传统方法先调用`Number()`将非数值的值转为数值，再进行判断，而这两个新方法只对数值有效，
+
+## Number.parseInt(),Number.parseFloat()
+
+ES6 将全局方法`parseInt()`和`parseFloat()`，移植到`Number`对象上面，行为完全保持不变。是逐步减少全局性方法，使得语言逐步模块化。
+
+```javascript
+Number.parseInt === parseInt // true
+Number.parseFloat === parseFloat // true
+```
+
+## Number.isInteger() 
+
+`Number.isInteger()`用来判断一个数值是否为整数。
+
+JavaScript 内部，整数和浮点数采用的是同样的储存方法，所以 25 和 25.0 被视为同一个值。
+
+如果参数不是数值，`Number.isInteger`返回`false`。
+
+**注意，由于 JavaScript 采用 IEEE 754 标准，数值存储为64位双精度格式，数值精度最多可以达到 53 个二进制位（1 个隐藏位与 52 个有效位）。如果数值的精度超过这个限度，第54位及后面的位就会被丢弃，这种情况下，`Number.isInteger`可能会误判。**
+
+```javascript
+Number.isInteger(3.0000000000000002) // true
+//小数的精度达到了小数点后16个十进制位，转成二进制位超过了53个二进制位，导致最后的那个2被丢弃了。
+```
+
+如果一个数值的绝对值小于`Number.MIN_VALUE`（5E-324），即小于 JavaScript 能够分辨的最小值，会被自动转为 0。这时，`Number.isInteger`也会误判。**如果对数据精度的要求较高，不建议使用`Number.isInteger()`判断一个数值是否为整数。**
+
+```javascript
+//5E-325由于值太小，会被自动转为0，因此返回true。
+Number.isInteger(5E-324) // false
+Number.isInteger(5E-325) // true
+```
+
+## Number.EPSILON
+
+`Number`对象上面，新增一个极小的常量`Number.EPSILON`。根据规格，它表示 1 与大于 1 的最小浮点数之间的差。引入一个这么小的量的目的，在于为浮点数计算，设置一个误差范围。我们知道浮点数计算是不精确的。
+
+## 安全整数和Number.isSafeInteger()
+
+JavaScript 能够准确表示的整数范围在`-2^53`到`2^53`之间（不含两个端点），超过这个范围，无法精确表示这个值。
+
+ES6 引入了`Number.MAX_SAFE_INTEGER`和`Number.MIN_SAFE_INTEGER`这两个常量，用来表示这个范围的上下限。
+
+## Math对象的扩展
+
+ES6 在 Math 对象上新增了 17 个与数学相关的方法。所有这些方法都是静态方法，只能在 Math 对象上调用。
 
 # 函数扩展
 
