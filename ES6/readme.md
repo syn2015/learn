@@ -702,6 +702,62 @@ str.replaceAll(regex, replacer)
 
 # 正则的扩展
 
+## RegExp 构造函数
+
+```javascript
+var regex = new RegExp('xyz', 'i');
+等价于
+var regex = new RegExp(/xyz/i);
+
+```
+
+ES5 不允许此时使用第二个参数添加修饰符，否则会报错。
+
+```javascript
+var regex = new RegExp(/xyz/, 'i');
+```
+
+ES6,如果`RegExp`构造函数第一个参数是一个正则对象，那么可以使用第二个参数指定修饰符。而且，返回的正则表达式会忽略原有的正则表达式的修饰符，只使用新指定的修饰符。
+
+```javascript
+new RegExp(/abc/ig, 'i').flags
+// "i"
+```
+
+
+
+## 字符串的正则方法
+
+字符串对象共有 4 个方法，可以使用正则表达式：`match()`、`replace()`、`search()`和`split()`。
+
+ES6在语言内部全部调用`RegExp`的实例方法，从而做到所有与正则相关的方法，全都定义在`RegExp`对象上。
+
+```javascript
+String.prototype.match 调用 RegExp.prototype[Symbol.match]
+String.prototype.replace 调用 RegExp.prototype[Symbol.replace]
+String.prototype.search 调用 RegExp.prototype[Symbol.search]
+String.prototype.split 调用 RegExp.prototype[Symbol.split]
+```
+
+## U修饰符
+
+ES6 对正则表达式添加了`u`修饰符，含义为“Unicode 模式”，用来正确处理大于`\uFFFF`的 Unicode 字符。也就是说，会正确处理四个字节的 UTF-16 编码。
+
+```javascript
+/^\uD83D/u.test('\uD83D\uDC2A') // false
+/^\uD83D/.test('\uD83D\uDC2A') // true
+```
+
+## ## RegExp.prototype.unicode 属性
+
+正则实例对象新增`unicode`属性，表示是否设置了`u`修饰符。
+
+## y修饰符
+
+ES6 还为正则表达式添加了`y`修饰符，叫做“粘连”（sticky）修饰符。
+
+与`g`修饰符类似，也是全局匹配，后一次匹配都从上一次匹配成功的下一个位置开始。不同之处在于，`g`修饰符只要剩余位置中存在匹配就可，而`y`修饰符确保匹配必须从剩余的第一个位置开始，这也就是“粘连”的涵义。
+
 # 数值扩展
 
 # 函数扩展
