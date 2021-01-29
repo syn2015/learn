@@ -286,3 +286,23 @@ box-shadow内阴影，outline方式
 ## :active伪类与CSS数据上报
 
 ## :focus
+
+## 八.URL定位伪类
+
+### love-hate
+
+**:link->:visited->:hover->:active**
+
+HTML有3中链接元素：a,link,area，这些可以原生支持href属性。:link伪类只能匹配a元素，且只可以识别真链接（href属性的a链接）
+
+### 区分a元素按钮是否禁用
+
+.cs-button:not([href]){opacity:.6;}
+
+### :visited
+
+支持的CSS属性：color,background-color,border-color,border-bottom/top/left/right-color,column-rule-color和outline-color。
+
+同时支持子选择器，且所能控制的CSS属性，同上。
+
+不支持::before和::after伪元素
