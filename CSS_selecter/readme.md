@@ -301,8 +301,9 @@ HTML有3中链接元素：a,link,area，这些可以原生支持href属性。:li
 
 ### :visited
 
-支持的CSS属性：color,background-color,border-color,border-bottom/top/left/right-color,column-rule-color和outline-color。
-
-同时支持子选择器，且所能控制的CSS属性，同上。
-
-不支持::before和::after伪元素
+1. 支持的CSS属性：color,background-color,border-color,border-bottom/top/left/right-color,column-rule-color和outline-color。
+2. 同时支持子选择器，且所能控制的CSS属性，同上。
+3. 不支持::before和::after伪元素
+4. :visited伪类选择器控制颜色时，语法上支持半透明色，表现上则是纯色或全透明
+5. 只能重置不能凭空设置
+6. 无法获取:visited设置和呈现的色值。（getComputedStyle())
