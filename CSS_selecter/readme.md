@@ -319,4 +319,13 @@ HTML有3中链接元素：a,link,area，这些可以原生支持href属性。:li
 
 ### :target
 
-1. 
+1. 刚刚
+
+## 九.输入伪类
+
+### :enabled和:disabled
+
+直接使用属性选择器设置禁用状态的输入框样式
+
+在Chrome下，带有href属性的a可以匹配:enabled伪类
+
