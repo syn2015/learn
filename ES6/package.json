@@ -1,0 +1,16 @@
+{
+  "name": "ES6",
+  "version": "1.0.0",
+  "description": "1. 各大浏览器最新版本对于 ES6 的支持，可以参阅 [ES6](http://kangax.github.io/compat-table/es6/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.12.13",
+    "@babel/preset-env": "^7.12.13"
+  }
+}
