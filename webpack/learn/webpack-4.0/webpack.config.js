@@ -44,7 +44,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: "css/styles.[hash].css",
+            filename: "css/styles.[hash].css",// filename: 'css/main.css', // css抽离到文件名
             chunkFilename: "[id].css"
         }),
     ],
@@ -133,3 +133,34 @@ module.exports = {
 // externals: {
 //     jquery: "$"
 // }
+//图片处理
+// file-loader
+// {
+//     test: /\.(png|jpe?g|gif)$/i,
+//     use: {
+//         loader: 'file-loader',
+//     }
+// },
+// html-withimg-loader
+// {
+//     test:/\.html$/,
+//     use: [
+//         {
+//             loader: 'html-withimg-loader'
+//         }
+//     ]
+// }
+// url-loader 打包图片base64 url-loader根据options 的 limit,如果满足就压缩成base64,如果超过limit,则使用file-loader,注释掉file-loader
+// {
+//     test: /\.(png|jpe?g|gif)$/i,
+//     use: {
+//         loader: 'url-loader',
+//         options: {
+//             esModule: false,
+//             limit: 1// 200kb,
+//             outputPath:'/img/',// 文件分类打包 打包后的路径 dist/img
+//         }
+//     }
+// },
+
+
