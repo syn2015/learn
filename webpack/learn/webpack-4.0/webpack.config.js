@@ -107,3 +107,29 @@ module.exports = {
         ]
     }
 }
+// 全局变量引入问题
+// 1.expose-loader 暴露到window上
+// {
+//     test: require.resolve('juery'),
+//     use: [
+//         {
+//             loader: 'expose-loader', // es6转es5
+//             options: {
+//                 option: '$'
+//             }
+//         }
+//     ]
+//     或者
+//     use: 'expose-loader?$'
+// }
+// 2.providerPlugin 给每个页面提供一个$ 配置
+// plugins:[
+//     new webpack.ProviderPlugin({
+//         $: 'jquery',
+//         'jquery': 'jquery'
+//     })
+// ]
+// 3.script标签引入不打包 externals 配置
+// externals: {
+//     jquery: "$"
+// }
