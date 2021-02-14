@@ -50,3 +50,63 @@ module.exports = {
 //         }),
 //         new webpack.BannerPlugin('2020') // 会在所有的打包的文件前面加上2020的注释
 //     ]
+
+
+//跨域
+// 重写的方式，把请求代理到express的服务器上，如localhost:8080 请求localhost:3000的接口module.exports = {
+//     devserver: {
+//         proxy: {
+//             '/api': {
+//                 target: 'http://localhost:3000',
+//                 pathRewrite: {'/api': ''} // 统一控制api开头的请求
+//             }
+//         }
+//     }
+// }
+//单纯的模拟数据,直接在webpack 的配置里模拟接口
+// devServer: {
+//     before(app) {
+//         app.get('/api/user',() = >(req, res){
+//             res.json({name: 'hui lin-before'})
+//         })
+//     }
+// }
+// 直接在服务端在服务端启动webpack,则不会存在跨域的问题
+// let express = require('express')
+
+// let app = new express()
+// let webpack = require('webpack')
+// let webpackDevMiddleWare = require('webpack-dev-middleware')
+// let config = require('./webpack.config.js')
+
+// let compiler = webpack(config)
+
+// app.use(webpackDevMiddleWare(compiler))
+
+// app.get('/api/user', (req, res)=>{
+//     res.json({name: 'hui lin4545'})
+// })
+
+// app.listen(3000)
+
+// resolve
+// 解析第三方包 common
+// module.exports = {
+//     resolve: {
+//         modules: [path.resolve('node_modulse')],
+//         alias: { // 添加别名
+//             boostrap: 'bootstrap/dist/css/bootstrap.css'
+//         },
+//         mainFields: ['style, main'], //先找包下的package.json style，找不到再去找package.json main
+//         mainFiles: [], // 指定入口文件，默认是index.js
+//         extensions: ['.js', '.css', '.json'] // 当你不写后缀的话，找不到js,就去找css 
+//     }
+// }
+
+// 定义环境变量
+// new webpack.DefinePlugin({
+//     DEV: '"production"'
+//     DEV2: JSON.stringify('production'), // 字符串
+//     FLAG: 'true', // boolean 类型
+//     EXT: '1+1' // 表达式
+// })
