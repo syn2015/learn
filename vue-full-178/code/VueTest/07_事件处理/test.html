@@ -53,6 +53,7 @@
       test2 (msg) {
         alert(msg)
       },
+      // msg是传参，event是事件对象
       test3 (msg, event) {
         alert(msg+'---'+event.target.textContent)
       },
@@ -67,7 +68,7 @@
       test6 () {
         alert('inner')
       },
-
+      //事件对象$event
       test7 (event) {
         console.log(event.keyCode)
         alert(event.target.value)
