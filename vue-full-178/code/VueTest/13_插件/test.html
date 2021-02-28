@@ -7,10 +7,12 @@
 <body>
 
 <div id="test">
+  <!-- 自定义插件中的指令 -->
   <p v-my-directive="msg"></p>
 </div>
 
 <script type="text/javascript" src="../js/vue.js"></script>
+<!-- 引用vue的自定义插件 -->
 <script type="text/javascript" src="vue-myPlugin.js"></script>
 <script type="text/javascript">
   // 声明使用插件(安装插件: 调用插件的install())
@@ -22,7 +24,9 @@
       msg: 'HaHa'
     }
   })
+  // 全局方法
   Vue.myGlobalMethod()
+  // 实例方法
   vm.$myMethod()
 
   new Object()
