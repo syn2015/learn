@@ -17,6 +17,7 @@
   export default {
     data () {
       return {
+        // 首先冲local storage中读取变化数据或者'[]'
         // todos: JSON.parse(localStorage.getItem('todos_key') || '[]')  // 读取localStorage保存的数据
         todos: storageUtils.readTodos()
       }

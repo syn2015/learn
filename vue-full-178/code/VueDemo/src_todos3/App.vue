@@ -33,7 +33,9 @@
       // this.$on('addTodo',  this.addTodo) 绑定监听的目标不对
       this.$refs.header.$on('addTodo',  this.addTodo)
       // 订阅消息(deleteTodo)
+      // pubsub函数这里需要传入两个参数msg是必须传递的
       PubSub.subscribe('deleteTodo', (msg, index) => {
+        // 这里必须使用箭头函数，因为此时this的指向是pubsub内部控制的。
         this.deleteTodo(index)
       })
     },

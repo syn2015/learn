@@ -20,14 +20,17 @@
 
     computed: {
       completeSize () {
+        // reduce() 方法接收一个函数作为累加器，数组中的每个值（从左到右）开始缩减，最终计算为一个值。
+//注意: reduce() 对于空数组是不会执行回调函数的。
+      //pretotal,初始值；todo,当前元素；0是初始值
         return this.todos.reduce((preTotal, todo) => preTotal + (todo.complete?1:0) ,0)
       },
-
+      //是否全选功能
       checkAll: {
         get () { // 决定是否勾选
           return this.completeSize===this.todos.length && this.completeSize>0
         },
-
+        //读取是否全选
         set (value) {// 点击了全选checkbox  value是当前checkbox的选中状态(true/false)
           this.selectAll(value)
         }

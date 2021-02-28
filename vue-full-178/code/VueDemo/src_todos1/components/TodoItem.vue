@@ -1,9 +1,12 @@
 <template>
+<!-- mouseenter,mouseleave:不冒泡 -->
+<!-- mouseover,mouseout:冒泡 -->
   <li :style="{background: bgColor}" @mouseenter="handleEnter(true)" @mouseleave="handleEnter(false)">
     <label>
       <input type="checkbox" v-model="todo.complete"/>
       <span>{{todo.title}}</span>
     </label>
+    <!-- 悬浮显示 -->
     <button class="btn btn-danger" v-show="isShow" @click="deleteItem">删除</button>
   </li>
 </template>
@@ -18,7 +21,7 @@
 
     data () {
       return {
-        bgColor: 'white',
+        bgColor: 'white',//默认背景颜色
         isShow: false
       }
     },
