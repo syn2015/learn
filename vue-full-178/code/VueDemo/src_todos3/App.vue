@@ -91,7 +91,7 @@
           // 将数据(json)保存到localStorage
           // localStorage.setItem('todos_key', JSON.stringify(val))
           storageUtils.saveTodos(val)
-        }*/git
+        }*/
         // handler的值应该是一个函数, 且函数应该要有一个形参(接收todos最新的值)
         handler: storageUtils.saveTodos,
         /*handler: function  (todos) {

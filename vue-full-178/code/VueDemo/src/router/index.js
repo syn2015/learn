@@ -19,6 +19,7 @@ import MessageDetail from '../pages/MessageDetail.vue'
  */
 Vue.use(VueRouter)
 
+//创建路由器的构造函数
 export default new VueRouter ({
   // 注册应用中所有的路由
   routes: [
@@ -31,11 +32,11 @@ export default new VueRouter ({
       component: Home,
       children: [
         {
-          path: '/home/news',
+          path: '/home/news', //path:'/news'这种写法不对，/代表根路由
           component: News
         },
         {
-          path: 'message',
+          path: 'message', //简化写法
           component: Message,
           children: [
             {
@@ -45,7 +46,7 @@ export default new VueRouter ({
           ]
         },
         {
-          path: '',
+          path: '',       //子路由里面，配置默认显示
           redirect: '/home/news'
         }
       ]

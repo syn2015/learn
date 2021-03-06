@@ -8,6 +8,8 @@
 
 <script>
   export default {
+  //  这里接收来自router-view的数据
+
     props: {
       msg: String
     }

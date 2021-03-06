@@ -19,6 +19,7 @@
           <div class="panel-body">
             <!--显示当前组件-->
             <keep-alive>
+              <!-- 这里通过router-view传递组件的数据 -->
               <router-view msg="abc"></router-view>
             </keep-alive>
           </div>
