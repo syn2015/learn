@@ -166,7 +166,7 @@ var compileUtil = {
     var eventType = dir.split(':')[1],
       // 根据表达式得到事件处理函数(从methods中): test(){}
       fn = vm.$options.methods && vm.$options.methods[exp];
-    // 如果都存在
+    // 如果都存在:事件名称和回调函数
     if (eventType && fn) {
       // 绑定指定事件名和回调函数的DOM事件监听, 将回调函数中的this强制绑定为vm
       node.addEventListener(eventType, fn.bind(vm), false);

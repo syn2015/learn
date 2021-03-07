@@ -18,7 +18,7 @@ Observer.prototype = {
         // 对指定属性实现响应式数据绑定
         this.defineReactive(this.data, key, val);
     },
-
+    //对所有层次的数据绑定数据
     defineReactive: function(data, key, val) {
         // 创建与当前属性对应的dep对象
         var dep = new Dep();
