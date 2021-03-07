@@ -128,6 +128,7 @@ var compileUtil = {
     this.bind(node, vm, exp, 'model');
 
     var me = this,
+    //得到表达式对应的值
       val = this._getVMVal(vm, exp);
     node.addEventListener('input', function (e) {
       var newValue = e.target.value;
@@ -182,7 +183,7 @@ var compileUtil = {
     });
     return val;
   },
-
+  //将最新的value保存给表达式对应的属性
   _setVMVal: function (vm, exp, value) {
     var val = vm._data;
     exp = exp.split('.');

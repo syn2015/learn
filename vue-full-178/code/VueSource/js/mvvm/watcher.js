@@ -34,11 +34,11 @@ Watcher.prototype = {
     Dep.target = this;
     // 获取当前表达式的值, 内部会导致属性的get()调用
     var value = this.getVMVal();
-
+    //每次建立关系完成以后，清除
     Dep.target = null;
     return value;
   },
-
+//获取表达式对应的值，不建立关系。
   getVMVal: function () {
     var exp = this.exp.split('.');
     var val = this.vm._data;
