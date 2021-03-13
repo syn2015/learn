@@ -71,7 +71,7 @@
 		computed: mapGetters(['mmm'])
 		methods: mapActions(['zzz'])
 	}
-
+	
 	{{mmm}} @click="zzz(data)"
 
 
@@ -106,3 +106,5 @@
 		new Vue({
 			store
 		})
+
+![](数据绑定.png)

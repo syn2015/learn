@@ -29,6 +29,7 @@
     computed: {
       ...mapState(['count']),
       ...mapGetters(['evenOrOdd'])
+      // 如果action和mutations中的方法名称不一致，可以使用对象映射：...mapGetters({evenOrOdd:'evenOrOdd2'})
     },
 
     /*methods: {

@@ -18,6 +18,7 @@
 
       checkAll: {
         get () { // 决定是否勾选
+        //这个地方采用原始的去读state状态的方式
           return this.$store.getters.isAllSelect
         },
 

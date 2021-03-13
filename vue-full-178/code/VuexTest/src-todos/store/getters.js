@@ -13,6 +13,7 @@ export default {
   },
 
   // 判断是否需要全选
+  //getters，可以使用其他的getters变量
   isAllSelect (state, getters) {
     return getters.completeSize===getters.totalSize && getters.completeSize>0
   }

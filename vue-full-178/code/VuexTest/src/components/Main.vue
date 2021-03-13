@@ -20,6 +20,7 @@
   export default {
     computed: {
       ...mapState(['firstView', 'loading', 'errorMsg', 'users'])
+      //
     }
   }
 </script>

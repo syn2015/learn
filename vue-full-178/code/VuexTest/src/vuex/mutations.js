@@ -5,6 +5,7 @@
 import {REQUESTING, REQUEST_SUCCESS, REQUEST_ERROR} from './mutation-types'
 
 export default {
+  // 使用的是requesting函数
   [REQUESTING] (state ) {
     state.firstView = false
     state.loading = true

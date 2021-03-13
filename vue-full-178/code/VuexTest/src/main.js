@@ -11,6 +11,10 @@ import store from './vuex/store'
 new Vue({
   el: '#app',
   render: h => h(App),
+  //代替components和template属性
+  // render:function(createElement){
+  //   return createElement(App);//<App/>
+  // },
   store
 })
 
