@@ -305,4 +305,83 @@ app.listen(3000, function () {
 4. HMR Runtime（服务端）: 会被注⼊到浏览器，
    更新⽂件的变化  
 5. bundle.js: 构建输出的⽂件  
-6. BundleServer和HMR Runtime通常是websocket链接
+6. **BundleServer和HMR Runtime通常是websocket链接**
+
+
+
+文件指纹：打包后输入的文件名的后缀（生成模式下使用，不能与HotModuleReplacementPlugin一起使用）
+
+1. Hash：**和整个项⽬的构建相关**，只要**项⽬⽂件有修改**，整个项⽬构建的 hash 值就会更改
+2. Chunkhash**：和 webpack 打包的 chunk 有关**，不同的 entry 会⽣成不同的 chunkhash 值
+3. Contenthash：**根据⽂件内容来定义 hash** ，⽂件内容不变，则 contenthash 不变  
+
+```json
+//JS文件:设置output的filename,使用[chunkhash]
+output: {
+    + filename: '[name]_[chunkhash:8].js',
+    path: __dirname + '/dist'
+}
+
+//MiniCssExtractPlugin(写作：MiniCssExtractPlugin.loader)不能实style-loader一起使用
+
+//CSS文件：设置 MiniCssExtractPlugin (抽离CSS单文件)的 filename，使⽤ [contenthash]
+plugins: [
+    + new MiniCssExtractPlugin({
+   		 + filename: `[name]_[contenthash:8].css`
+    + });
+]
+
+
+
+//图片文件：设置 file-loader 的 name，使⽤ [hash]
+rules: [
+    {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [{
+        loader: 'file-loader’,
+        + options: {
+        	+ name: 'img/[name]_[hash:8].[ext] '
+        + }
+        }]
+    }
+]
+```
+
+![](占位符示意.png)
+
+代码压缩：
+
+```json
+//JS压缩：webpack4内置uglifyjs-webpack-plugin
+
+//CSS压缩：使⽤ optimize-css-assets-webpack-plugin
+//同时使⽤ cssnano
+//npm install optimize-css-assets-webpack-plugin cssnano -D 
+plugins: [
+    + new OptimizeCSSAssetsPlugin({
+        + assetNameRegExp: /\.css$/g,
+        + cssProcessor: require('cssnano’ )
+    + })
+]
+//html ⽂件的压缩:  修改 html-webpack-plugin， 设置压缩参数
+// npm i html-webpack-plugin -D 
+plugins: [
++ new HtmlWebpackPlugin({
+    + template: path.join(__dirname, 'src/search.html’ ),
+    + filename: 'search.html’ ,
+    + chunks: ['search’ ],
+    + inject: true,//自动注入js,css
+    + minify: {
+        + html5: true,
+        + collapseWhitespace: true,
+        + preserveLineBreaks: false,
+        + minifyCSS: true,
+        + minifyJS: true,
+        + removeComments: false
+    + }
++ })
+]
+```
+
+# chapter3
+
