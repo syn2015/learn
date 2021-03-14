@@ -8,7 +8,7 @@
 
 # chapter2
 
-entry：
+## entry：
 
 ```json
 单⼊⼝： entry 是⼀个字符串 多⼊⼝： entry 是⼀个对象
@@ -23,7 +23,7 @@ module.exports = {
 };
 ```
 
-output:
+## output:
 
 ```json
 单入口：
@@ -47,7 +47,7 @@ module.exports = {
 };
 ```
 
-loaders: **test指定匹配规则，use指定使用loader名称**
+## loaders: **test指定匹配规则，use指定使用loader名称**
 
 ![](loaders.png)
 
@@ -59,7 +59,7 @@ module: {
 }
 ```
 
-plugins数组:
+## plugins数组:
 
 ![](plugins.png)
 
@@ -70,11 +70,11 @@ new HtmlWebpackPlugin({template:
 ]
 ```
 
-mode:
+## mode:
 
 ![](mode内置函数.png)
 
-解析 ES6  
+## 解析 ES6  
 
 .babelrc文件
 
@@ -105,7 +105,7 @@ npm i @babel/core @babel/preset-env babel-loader -D
 }
 ```
 
-解析 React JSX  
+## 解析 React JSX  
 
 .babelrc文件
 
@@ -138,7 +138,7 @@ npm i react-dom @babel/preset-react -D
 }
 ```
 
-CSS解析：
+## CSS解析：
 
 ```json
 npm install style-loader css-loader less less-loader -D
@@ -165,7 +165,7 @@ npm install style-loader css-loader less less-loader -D
 + }
 ```
 
-图片解析：
+## 图片解析：
 
 ```json
 npm install file-loader -D
@@ -181,7 +181,7 @@ module: {
 }
 ```
 
-字体解析：
+## 字体解析：
 
 ```json
 npm install file-loader -D
@@ -197,7 +197,9 @@ npm install file-loader -D
 + }
 ```
 
-资源解析解析：url-loader处理图片和字体，设置较小的资源自动base64
+## 资源解析解析：
+
+url-loader处理图片和字体，设置较小的资源自动base64
 
 ```json
 npm install url-loader -D
@@ -216,7 +218,7 @@ npm install url-loader -D
 + }
 ```
 
-文件监听：
+## 文件监听：
 
 ​	两种方式：启动webpack时，--watch参数
 
@@ -250,7 +252,9 @@ module.export = {
 }
 ```
 
-热更新： webpack-dev-server  搭配HotModuleReplacementPlugin插件  ,不刷新浏览器，不输出文件而是放在内存中。
+## 热更新：
+
+ webpack-dev-server  搭配HotModuleReplacementPlugin插件  ,不刷新浏览器，不输出文件而是放在内存中。
 
 ```json
 //webpack-dev-server在开发状态下使用
@@ -309,7 +313,9 @@ app.listen(3000, function () {
 
 
 
-文件指纹：打包后输入的文件名的后缀（生成模式下使用，不能与HotModuleReplacementPlugin一起使用）
+## 文件指纹：
+
+打包后输入的文件名的后缀（生成模式下使用，不能与HotModuleReplacementPlugin一起使用）
 
 1. Hash：**和整个项⽬的构建相关**，只要**项⽬⽂件有修改**，整个项⽬构建的 hash 值就会更改
 2. Chunkhash**：和 webpack 打包的 chunk 有关**，不同的 entry 会⽣成不同的 chunkhash 值
@@ -349,7 +355,7 @@ rules: [
 
 ![](占位符示意.png)
 
-代码压缩：
+## 代码压缩：
 
 ```json
 //JS压缩：webpack4内置uglifyjs-webpack-plugin
@@ -385,7 +391,7 @@ plugins: [
 
 # chapter3
 
-清理构建目录
+## 清理构建目录
 
 ```shell
 rm -rf ./dist && webpack
@@ -426,7 +432,7 @@ rules: [
 
 ```
 
-移动端 CSS px ⾃动转换成 rem  
+## 移动端 CSS px ⾃动转换成 rem  
 
 使用px2rem-loader
 
@@ -506,7 +512,7 @@ flexible.js包不支持内联
 
 
 
-资源内联
+## 资源内联
 
 1. 代码层面
 
@@ -525,7 +531,7 @@ flexible.js包不支持内联
 
 //raw-loader0.5.1版本 内联 html
 
-<script>${require(' raw-loader!babel-loader!. /meta.html')}</script>
+<script>${require('raw-loader!babel-loader!. /meta.html')}</script>
 
 
 //raw-loader0.5.1版本 内联 JS
@@ -556,7 +562,350 @@ rules: [
     },
 ]
 //方案二:html-inline-css-webpack-plugin
+$ npm install --save-dev html-webpack-plugin html-webpack-inline-source-plugin
+
+var HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+plugins: [  
+    inlineSource: '.(js|css)$' // 增加一个 inlineSource 选项来匹配 css 和 js 
+    new HtmlWebpackInlineSourcePlugin()
+]
+
+```
+
+## 多页面应用MPA
+
+每个⻚⾯对应⼀个 entry，⼀个 html-webpack-plugin  
+
+缺点：每次新增或删除⻚⾯需要改 webpack 配置  
+
+```json
+entry: {
+    index: './src/index.js',
+    search: './src/search.js ‘
+}
+```
+
+多⻚⾯打包通⽤⽅案  
+
+动态获取 entry 和设置 html-webpack-plugin 数量  
+
+```json
+//利用glob.sync
+//npm i glob -D
+const glob = require('glob');
+const setMPA=()=>{
+    const entry={};
+    const htmlWebpackPlugins=[];
+    const entryFiles=glob.sync(path.join(__dirname, './src/*/index.js'));
+    Object.keys(entryFiles).map((index)=>{
+        const entryFile=entryFiles[index];
+        //获取文件名称
+        const match = entryFile.match(/src\/(.*)\/index\.js/);
+        /*match的内容*/
+        //['src/index/index.js','index',index:27,input:'带有盘符的路径',groups:undefined]
+        const pageName = match && match[1];
+        entry[pageName] = entryFile;
+         htmlWebpackPlugins.push(
+                new HtmlWebpackPlugin({
+                    template: path.join(__dirname, `src/${pageName}/index.html`),
+                    filename: `${pageName}.html`,
+                    chunks: [pageName],
+                    inject: true,
+                    minify: {
+                        html5: true,
+                        collapseWhitespace: true,
+                        preserveLineBreaks: false,
+                        minifyCSS: true,
+                        minifyJS: true,
+                        removeComments: false
+                    }
+                })
+            );
+    })
+    return {
+         entry,
+         htmlWebpackPlugins
+    }
+}
+const { entry, htmlWebpackPlugins } = setMPA();
+
+```
+
+## source map
+
+1. devtool选项（mode设为none）
+
+2. source map关键字
+
+   - eval: 使⽤eval包裹模块代码，不产生map文件
+   - source map: 产⽣.map⽂件  
+   - cheap: 不包含列信息
+   - inline: 将.map作为DataURI嵌⼊，不单独⽣成.map⽂件
+   - module:包含loader的sourcemap  
+
+3. source map类型
+
+   ![](sourceMap-类型.png)
+
+   
+
+## 基础库分离  
+
+使⽤ html-webpackexternals-plugin  
+
+```json
+//npm i html-webpackexternals-plugin -D
+plugins: [
+    new HtmlWebpackExternalsPlugin({
+      externals: [
+        {
+          module: "react",
+          entry:
+            "https://cdn.bootcss.com/react/16.13.1/umd/react.development.js",
+          global: "React",
+        },
+        {
+          module: "react-dom",
+          entry:
+            "https://cdn.bootcss.com/react-dom/16.13.1/umd/react-dom.development.js",
+          global: "ReactDOM",
+        },
+      ],
+    }),
+  ],
+//同时需要在index.html写入cdn地址，这样生产打包以后可以使用线上资源
+```
+
+SplitChunksPlugin
+
+webpack4内置，替代CommonsChunkPlugin插件
+
+```json
+//chunks 参数说明：
+	//async 异步引⼊的库进⾏分离(默认)
+	//initial 同步引⼊的库进⾏分离
+	//all 所有引⼊的库进⾏分离(推荐)
+//分离公共脚本
+optimization: {
+    splitChunks: {
+        chunks: 'async',
+        minSize: 30000,
+        maxSize: 0,
+        minChunks: 1,
+        maxAsyncRequests: 5,
+        maxInitialRequests: 3,
+        automaticNameDelimiter: '~',
+        name: true,
+        cacheGroups: {
+            vendors: {
+                test: /[\\/]node_modules[\\/]/,
+                priority: -10
+            }
+        }
+    }
+}
+//分离基础包
+//test: 匹配出需要分离的包
+
+optimization: {
+    splitChunks: {
+        cacheGroups: {
+            commons: {
+                test: /(react|react-dom)/,
+                name: 'vendors',//打包之后包含上述包的JS
+                chunks: 'all'
+            }
+        }
+    }
+}
+//需要在index.html中手动引入vendors包，或者是添加到在HtmlWebpackExternalsPlugin中的chunks选项中
+chunks:['vendors',pageName],
 
 
+
+
+//分离公共文件
+//minChunks设置最小引用次数为2
+//minSize:分离的包体积的大小
+optimization: {
+    splitChunks: {
+        minSize: 0,//所有引用的包都会被打包成commons
+            cacheGroups: {
+                commons: {
+                    name: 'commons',
+                    chunks: 'all',
+                    minChunks: 2
+                }
+            }
+        }
+    }
+}
+//需要在index.html中手动引入commons包，或者是添加到在HtmlWebpackExternalsPlugin中的chunks选项中
+chunks:['commons',pageName],
+```
+
+## tree shaking(摇树优化)
+
+**概念：** 1 个模块可能有多个⽅法，只要其中的某个⽅法使⽤到了，则整个⽂件都会被打到bundle ⾥⾯去， tree shaking 就是只把⽤到的⽅法打⼊ bundle ， 没⽤到的⽅法会在uglify 阶段被擦除掉。  
+
+1. webpack 默认⽀持，在 .babelrc ⾥设置 modules: false 即可
+
+2. production mode的情况下默认开启  
+3. 要求：必须是 ES6 的语法， CJS 的⽅式(require)不⽀持
+
+**DCE (Dead code elimination)**  
+
+- 特点是代码不会被执⾏，不可到达  
+- 代码执⾏的结果不会被⽤到  
+- 代码只会影响死变量（只写不读）  
+
+**tree-shaking原理**
+
+1. 利⽤ ES6 模块的特点:
+   - ·只能作为模块顶层的语句出现
+   - · import 的模块名只能是字符串常量
+   - · import binding 是 immutable的
+   - 代码擦除： uglify 阶段删除⽆⽤代码  
+
+## scope hoisting
+
+**现象：构建后的代码存在⼤量闭包代码**  
+
+⼤量作⽤域包裹代码，导致体积增⼤（模块越多越明显）  
+
+运⾏代码时创建的函数作⽤域变多，内存开销变⼤  
+
+**原理：** 将所有模块的代码按照引⽤顺序放在⼀个函数作⽤域⾥，然后适当的重命名⼀些变量以防⽌变量名冲突
+**对⽐**: 通过 scope hoisting 可以减少函数声明代码和内存开销  
+
+**模块转换分析**  
+
+1. ·被 webpack 转换后的模块会带上⼀层包裹
+2. ·import 会被转换成 __webpack_require  
+3. 打包出来的是⼀个 IIFE (匿名闭包)  
+4. modules 是⼀个数组，每⼀项是⼀个模块初始化函数  
+5. __webpack_require ⽤来加载模块，返回 module.exports  
+6. 通过 WEBPACK_REQUIRE_METHOD(0) 启动程序  
+
+**scope hoisting使用**
+
+webpack3
+
+```json
+plugins: [
++ new webpack.optimize.ModuleConcatenationPlugin()
+};
+```
+
+webpack4
+
+```json
+webpack mode 为 production 默认开启
+必须是 ES6 语法， CJS(require) 不⽀持
+```
+
+**代码分割**
+
+对于⼤的 Web 应⽤来讲，将所有的代码都放在⼀个⽂件中显然是不够有效的，特别是当你的某些代码块是在某些特殊的时候才会被使⽤到。 webpack 有⼀个功能就是将你的代码库分割成chunks（语块），当代码运⾏到需要它们的时候再进⾏加载。  
+
+**适用场景**
+
+1. 抽离相同代码到⼀个共享块  
+2. 脚本懒加载，使得初始下载的代码更⼩  
+
+**懒加载JS脚本的方式**
+
+1. CommonJS:require.ensure
+
+2. ES6:动态import(目前还没有原生支持，需要babel转换)
+
+   ```json
+   //
+   npm install @babel/plugin-syntax-dynamic-import --save-dev
+   //.babelrc文件
+   {
+   	"plugins":["@babel/plugin-syntax-dynamic-import"],
+   }
+   ```
+
+## ESLint
+
+基于 eslint:recommend 配置并改进  
+
+和CI/CD集成
+
+![](eslint-CI-CD.png)
+
+和webpack集成
+
+
+
+```json
+//npm install eslint-plugin-import eslint-plugin-react eslint-plugin-jsx-ally eslint-loader eslint-config-airbnb -D
+//webpack.config.json
+module: {
+    rules: [
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: [
+                "babel-loader",
+                + "eslint-loader”
+            ]
+        }
+    ]
+}
+//.eslintrc.js文件
+module.exports = {
+    "parser": "babel-eslint",//解析器
+    "extends": "airbnb",//继承airbnb配置
+    "env": {
+        "browser": true,//环境变量
+        "node": true
+    },
+    "rules": {
+        "indent": ["error", 4]
+    }
+};
+```
+
+## 打包组件和库
+
+
+
+```json
+//暴露库
+mode: "production",
+entry: {
+    "large-number": "./src/index.js",
+    "large-number.min": "./src/index.js"
+},
+output: {
+    filename: "[name].js",
+    library: "largeNumber",//指定库的全局变量
+    libraryExport: "default",//指定库的使用方式：default,可以不用new的方式
+    libraryTarget: "umd"//库的引用方式
+}
+//.min的压缩，include设置只压缩min.js结尾的文件
+// npm i terser-webpack-plugin -D 安装压缩库 ，webpack4内置生产环境下启用
+mode:'none',//首先设置none
+optimization: {
+    minimize: true,
+    minimizer: [
+        new TerserPlugin({
+        	include: /\.min\.js$/,
+        }),
+    ],
+}
+//设置入口文件：package.json的main字段为index.js
+//package.json里增加钩子prepublish
+"prepublish":"webpack"
+
+//index.js文件
+if (process.env.NODE_ENV === "production") {
+module.exports = require("./dist/large-number.min.js");
+} else {
+module.exports = require("./dist/large-number.js");
+}
 ```
 
