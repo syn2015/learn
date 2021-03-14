@@ -385,3 +385,178 @@ plugins: [
 
 # chapter3
 
+清理构建目录
+
+```shell
+rm -rf ./dist && webpack
+rimraf ./dist && webpack
+```
+
+```json
+//npm install clean-webpack-plugin -D
+plugins: [
+	+ new CleanWebpackPlugin()
+]
+```
+
+PostCSS 插件 autoprefixer ⾃动补⻬ CSS3 前缀  
+
+```json
+//npm install postcss-loader autoprefixer -D 
+
+rules: [
+{
+    test: /\.less$/,
+    use: [
+    'style-loader',
+    'css-loader',
+    'less-loader',
+    + {
+        + loader: 'postcss-loader',
+        + options: {
+            + plugins: () => [
+                + require('autoprefixer')({
+                    + browsers: ["last 2 version", "> 1%", "iOS 7"]
+                + })
+            + ]
+		 }
+    + }
++ }
+]
+
+```
+
+移动端 CSS px ⾃动转换成 rem  
+
+使用px2rem-loader
+
+```json
+//npm i px2rem-loader -D
+//npm i lib-flexible -S  生产依赖
+rules: [
+{
+    test: /\.less$/,
+    use: [
+    'style-loader',
+    'css-loader',
+    'less-loader',
+    + {
+        + loader: "px2rem-loader",
+        + options: {
+            + remUnit: 75,//1rem等于75px
+            + remPrecision: 8 //保留小数点
+        + }
+    + }
+    ]
+}
+]	
+```
+
+flexible.js包不支持内联
+
+```html
+//index.html
+<script>
+    (function flexible (window, document) {
+  var docEl = document.documentElement
+  var dpr = window.devicePixelRatio || 1
+
+  // adjust body font size
+  function setBodyFontSize () {
+    if (document.body) {
+      document.body.style.fontSize = (12 * dpr) + 'px'
+    }
+    else {
+      document.addEventListener('DOMContentLoaded', setBodyFontSize)
+    }
+  }
+  setBodyFontSize();
+
+  // set 1rem = viewWidth / 10
+  function setRemUnit () {
+    var rem = docEl.clientWidth / 10
+    docEl.style.fontSize = rem + 'px'
+  }
+
+  setRemUnit()
+
+  // reset rem unit on page resize
+  window.addEventListener('resize', setRemUnit)
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
+      setRemUnit()
+    }
+  })
+
+  // detect 0.5px supports
+  if (dpr >= 2) {
+    var fakeBody = document.createElement('body')
+    var testElement = document.createElement('div')
+    testElement.style.border = '.5px solid transparent'
+    fakeBody.appendChild(testElement)
+    docEl.appendChild(fakeBody)
+    if (testElement.offsetHeight === 1) {
+      docEl.classList.add('hairlines')
+    }
+    docEl.removeChild(fakeBody)
+  }
+}(window, document))
+</script>
+```
+
+
+
+资源内联
+
+1. 代码层面
+
+   - ⻚⾯框架的初始化脚本
+
+   - 上报相关打点
+
+   - css 内联避免⻚⾯闪动  
+
+2. 请求HTTP
+
+   - 减少HTTP请求,比如⼩图⽚或者字体内联 (url-loader)  
+
+```html
+//npm i raw-loader@0.5.1 -D
+
+//raw-loader0.5.1版本 内联 html
+
+<script>${require(' raw-loader!babel-loader!. /meta.html')}</script>
+
+
+//raw-loader0.5.1版本 内联 JS
+
+<script>${require('raw-loader!babel-loader!../node_modules/lib-flexible')}</script>
+```
+
+
+
+```json
+//方案一：style-loader
+
+
+rules: [
+    {
+        test: /\.scss$/,
+        use: [
+            {
+                loader: 'style-loader',
+                options: {
+                    insertAt: 'top', // 样式插入到 <head>
+                    singleton: true, //将所有的style标签合并成一个
+                }
+            },
+            "css-loader",
+            "sass-loader"
+        ],
+    },
+]
+//方案二:html-inline-css-webpack-plugin
+
+
+```
+
