@@ -1,4 +1,4 @@
-# chapter1
+chapter1
 
 ## webpack 查看命令
 
@@ -907,5 +907,67 @@ module.exports = require("./dist/large-number.min.js");
 } else {
 module.exports = require("./dist/large-number.js");
 }
+```
+
+`prepublish`这个钩子不仅会在`npm publish`命令之前运行，还会在`npm install`（不带任何参数）命令之前运行。这种行为很容易让用户感到困惑，所以 npm 4 引入了一个新的钩子`prepare`，行为等同于`prepublish`，而从 npm 5 开始，`prepublish`将只在`npm publish`命令之前运行。
+
+## SSR
+
+
+
+## ⽇志显示  
+
+
+
+![](日志显示.png)
+
+stats字段
+
+```json
+//mode: "production"时，直接设置stats
+stats:'errors-only';
+//开发环境下
+devServer:{
+    contentBase:'./dist',
+    hot:true,
+    stats:'errors-only'
+}
+```
+
+使用friendly-errors-webpack-plugin  插件
+
+```json
+//npm i friendly-errors-webpack-plugin  -D
+plugins: [
++ new FriendlyErrorsWebpackPlugin()
+],
+
+```
+
+##　构建异常和中断
+
+1. 在 CI/CD 的 pipline 或者发布系统需要知道当前构建状态  每次构建完成后输⼊ echo $? 获取错误码  
+2. webpack4 之前的版本构建失败不会抛出错误码 (error code)  
+3. Node.js 中的 process.exit 规范  
+   - 0 表示成功完成，回调函数中， err 为 null  
+   - ⾮ 0 表示执⾏失败，回调函数中， err 不为 null， err.code 就是传给 exit 的数字  
+
+**主动捕获处理构建错误**
+
+```json
+//compiler 在每次构建结束后会触发 done 这个 hook
+//process.exit 主动处理构建报错
+
+plugins: [
+    function() {
+        this.hooks.done.tap('done', (stats) => {
+            if (stats.compilation.errors && stats.compilation.errors.length && process.argv.indexOf('--watch') == -1)
+            {
+                console.log('build error');
+                process.exit(1);
+            }
+        })
+    }
+]
 ```
 
