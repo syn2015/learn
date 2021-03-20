@@ -1015,3 +1015,121 @@ plugins: [
 ]
 ```
 
+# chapter4
+
+## 构建包(dependencies)
+
+1. 通过多个配置文件管理不同环境的构建， webpack --config 参数进行控制  (npm i webpack-merge -D )
+2. 将构建配置设计成一个库， 比如： hjs-webpack、 Neutrino、 webpack-blocks  
+3. 抽成一个工具进行管理， 比如： create-react-app, kyt, nwb  
+4. 将所有的配置放在一个文件， 通过 --env 参数控制分支选择  
+
+**ESLint规范构建脚本**
+
+```json
+//使用eslint-config-airbnb-base
+//npm i eslint eslint-config-airbnb-base babel-eslint -D
+// .eslintrc
+module.exports = {
+    "parser": "babel-eslint",
+    "extends": "airbnb-base",
+    "env": {
+        "browser": true,
+        "node": true
+    }
+};
+//script命令
+"eslint":"eslint --fix"
+```
+
+## 冒烟测试
+
+指对提交测试的软件在进行详细深入的测试之前而进行的预测试  
+
+```json
+//安装删除库 npm i rimraf -D 
+//安装测试库 npm i mocha -D
+//安装glob-all npm i glob-all -D
+```
+
+
+
+
+
+## 单元测试
+
+```json
+// npm i mocha chai -D
+
+//新建 test 目录， 并增加 xxx.test.js 测试文件
+
+//script
+"scripts": {
+	"test": "node_modules/mocha/bin/_mocha”
+},
+```
+
+
+
+## 持续集成
+
+.travis.yml
+
+## 发布到npm
+
+添加用户： npm adduser
+
+升级版本
+
+- 升级补丁版本号： npm version patch
+- 升级小版本号： npm version minor
+- 升级大版本号： npm version major
+
+发布版本： npm publish  
+
+## Changelog 生成  
+
+![](changelog.png)
+
+**本地开发阶段增加 precommit 钩子**  
+
+```json
+//npm install husky --save-dev
+//通过 commitmsg 钩子校验信息
+//package.json
+"scripts": {
+    "commitmsg": "validate-commit-msg",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+},
+"devDependencies": {
+    "validate-commit-msg": "^2.11.1",
+    "conventional-changelog-cli": "^1.2.0",
+    "husky": "^0.13.1"
+}
+```
+
+## 项目版本信息  
+
+1. 软件的版本通常由三位组成， 形如：X.Y.Z  
+2. 在发布重要版本时， 可以发布alpha, rc等先行版本  
+3. alpha和rc等修饰版本的关键字后面可以带上次数和meta信息  
+
+**遵守 semver 规范的优势**  
+
+1. 避免出现循环依赖
+2. 依赖冲突减少  
+
+**语义化版本（Semantic Versioning） 规范格式**  
+
+1. 主版本号： 当你做了不兼容的 API 修改，  
+2. 次版本号： 当你做了向下兼容的功能性新增  
+3. 修订号： 当你做了向下兼容的问题修正  
+
+**先行版本号**  
+
+作为发布正式版之前的版本， 格式是在修订版本号后面加上一个连接号（-） ， 再加上一连串以点（.） 分割的标识符， 标识符可以由英文、 数字和连接号（[0-9A-Za-z-]） 组成。  
+
+- alpha： 是内部测试版， 一般不向外部发布， 会有很多 Bug。 一般只有测试人员使用。
+- beta： 也是测试版， 这个阶段的版本会一直加入新的功能。 在 Alpha 版之后推出
+- rc： Release Candidate) 系统平台上就是发行候选版本。 RC 版不会再加入新的功能了， 主
+  要着重于除错。  
