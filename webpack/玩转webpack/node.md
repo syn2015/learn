@@ -913,7 +913,49 @@ module.exports = require("./dist/large-number.js");
 
 ## SSR
 
+服务器渲染特点
 
+- 所有模板等资源都存储在服务端  
+- 内⽹机器拉取数据更快  
+- ⼀个 HTML 返回所有数据  
+
+SSR的优势
+
+- 减少白屏时间
+- 对SEO友好
+
+SSR实现思路(React)
+
+​		服务器
+
+- 使⽤ react-dom/server 的 renderToString ⽅法将
+  React 组件渲染成字符串  
+
+- 服务端路由返回对应的模板  
+
+  客户端
+
+- 打包出针对服务端的组件  
+
+webpack ssr打包存在的问题
+
+- 浏览器的全局变量 (Node.js 中没有 document, window)  
+  - 组件适配：将不兼容的组件根据打包环境进⾏适配  
+  - 请求适配：将 fetch 或者 ajax 发送请求的写法改成 isomorphic-fetch 或者 axios  
+- 样式问题 (Node.js ⽆法解析 css)  
+  - 方案一:  服务端打包通过 ignore-loader 忽略掉 CSS 的解析  
+  - 方案二:  将 style-loader 替换成 isomorphic-style-loader  
+
+解决样式不显示的问题
+
+- 使⽤打包出来的浏览器端 html 为模板  
+
+- 设置占位符，动态插⼊组件  
+
+⾸屏数据 处理
+
+- 服务端获取数据  
+- 替换占位符  
 
 ## ⽇志显示  
 
@@ -955,16 +997,18 @@ plugins: [
 **主动捕获处理构建错误**
 
 ```json
-//compiler 在每次构建结束后会触发 done 这个 hook
+//compiler对象 在每次构建结束后会触发 done 这个 hook
 //process.exit 主动处理构建报错
 
 plugins: [
     function() {
+        //webpack4:  this.hooks.done.tap()
+        //webpack3:  this.plugin()
         this.hooks.done.tap('done', (stats) => {
             if (stats.compilation.errors && stats.compilation.errors.length && process.argv.indexOf('--watch') == -1)
             {
                 console.log('build error');
-                process.exit(1);
+                process.exit(1);//抛出错误码,数据上报
             }
         })
     }
