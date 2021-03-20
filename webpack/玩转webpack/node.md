@@ -649,7 +649,7 @@ const { entry, htmlWebpackPlugins } = setMPA();
 
    
 
-## 基础库分离  
+## <a name="基础库分离"><a>
 
 使⽤ html-webpackexternals-plugin  
 
@@ -1132,4 +1132,235 @@ module.exports = {
 - alpha： 是内部测试版， 一般不向外部发布， 会有很多 Bug。 一般只有测试人员使用。
 - beta： 也是测试版， 这个阶段的版本会一直加入新的功能。 在 Alpha 版之后推出
 - rc： Release Candidate) 系统平台上就是发行候选版本。 RC 版不会再加入新的功能了， 主
-  要着重于除错。  
+  要着重于除错。 
+
+# chapter5
+
+## 初级分析：内置的 stats  
+
+颗粒度太粗,难看出问题
+
+```json
+//package.json
+"script":{
+    "build:stats":"webpack --env production --json > stats.json",
+}
+```
+
+
+
+## 速度分析： 
+
+使用 speed-measure-webpack-plugin  可以看到每个 loader 和插件执行耗时  
+
+```json
+//npm i speed-measure-webpack-plugin --save-dev
+const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
+const smp = new SpeedMeasureWebpackPlugin();
+const webpackConfig = smp.wrap({
+  plugins: [new MyPlugin(), new MyOtherPlugin()],
+});
+```
+
+**webpack-bundle-analyzer  分析体积**
+
+```json
+//npm install --save-dev webpack-bundle-analyzer
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+module.exports = {
+  plugins: [
+    new BundleAnalyzerPlugin()
+  ]
+}
+//构架完成以后8888端口查看
+```
+
+**使用高版本的 webpack 和 Node.js  提高构建速度**
+
+1. V8 带来的优化（for of 替代 forEach、 Map 和 Set 替代 Object、 includes 替代 indexOf）  
+2. 默认使用更快的 md4 hash 算法  
+3. webpacks AST 可以直接从 loader 传递给 AST， 减少解析时间  
+4. 使用字符串方法替代正则表达式  
+
+## 多进程/多实例构建：
+
+ 资源并行解析可选方案  
+
+1. (we'b'pack3 )使用 HappyPack 解析资源:每次 webapck 解析一个模块， HappyPack 会将它及它的依赖分配给 worker 线程中  
+
+   
+
+2. 使用 thread-loader (webpack4):每次 webpack 解析一个模块， threadloader 会将它及它的依赖分配给 worker 线程中  
+
+   ```json
+   //npm install --save-dev thread-loader
+    rules: [
+         {
+           test: /\.js$/,
+           include: path.resolve('src'),
+           use: [
+             'thread-loader',
+             // your expensive loader (e.g babel-loader) 放在最前(最后处理任务)
+           ],
+         },
+       ],
+   ```
+
+   
+
+3. 并行压缩  
+
+   - 方法一： 使用 parallel-uglify-plugin 插件  
+
+     ```json
+     
+     ```
+
+   - (不支持ES6)uglifyjs-webpack-plugin 开启 parallel 参数  
+
+     ```json
+     
+     ```
+
+     
+
+   - terser-webpack-plugin 开启 parallel 参数  
+
+     ```json
+     const TerserPlugin = require('terser-webpack-plugin');
+      // optimization: {
+         //     minimizer: [
+         //         new TerserPlugin({
+         //             parallel: true,
+         //             cache: true
+         //         })
+         //     ]
+         // },
+     ```
+
+     
+
+   
+
+## 分包： 
+
+1. [设置 Externals ](#基础库分离)
+
+2. 进一步分包： 预编译资源模块 (基础包和业务基础包打包成一个文件  )
+
+   -  使用 DLLPlugin 进行分包  
+
+   ```json
+   //webpack.dll.js
+   
+   const path = require('path');
+   const webpack = require('webpack');
+   
+   module.exports = {
+       entry: {
+           library: [
+               'react',
+               'react-dom'
+           ]
+       },
+       output: {
+           filename: '[name]_[chunkhash].dll.js',
+           path: path.join(__dirname, 'build/library'),
+           library: '[name]'
+       },
+       plugins: [
+           new webpack.DllPlugin({
+               name: '[name]_[hash]',
+               path: path.join(__dirname, 'build/library/[name].json')// manifest.json的位置
+           })
+       ]
+   };
+   //package.json
+   "dll":"webpack --config webpack.dll.js"
+   ```
+
+   - 使用 DllReferencePlugin 引用 manifest.json  
+
+   ```json
+   //在webpack.config.js引入
+   module.exports={
+       plugins:[
+            new webpack.DllReferencePlugin({
+               manifest: require('./build/library/library.json')
+            }),
+       ]
+   }
+   ```
+
+## 缓存  
+
+提升二次构建速度
+
+1. babel-loader 开启缓存(**转换JS语法阶段**)
+
+   ```json
+       new HappyPack({
+               // 3) re-add the loaders you replaced above in #1:
+               loaders: [ 'babel-loader?cacheDirectory=true' ]
+           }),
+   ```
+
+   
+
+2. terser-webpack-plugin 开启缓存(**代码压缩阶段**)
+
+   ```json
+    // optimization: {
+       //     minimizer: [
+       //         new TerserPlugin({
+       //             parallel: true,
+       //             cache: true
+       //         })
+       //     ]
+       // },
+   ```
+
+   
+
+3. 使用 cache-loader 或者 hard-source-webpack-plugin  (**提升模块转换阶段**)
+
+   ```json
+   //npm i --save-dev hard-source-webpack-plugin
+   const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+   plugins:[
+         new HardSourceWebpackPlugin(),
+   ]
+   ```
+
+## 缩小构建目标  
+
+```json
+rules:{
+    test: /.js$/,
+    include: path.resolve('src'),
+    use: [
+        'happypack/loader'
+    ],
+    exclude:'node_modules'
+}
+```
+
+减少文件搜索范围
+
+```json
+//resolve.modules设置
+//resolve.mainFields配置
+//resolve.extensions配置
+//合理使用alias
+   resolve: {
+        alias: {
+             'react': path.resolve(__dirname, './node_modules/react/umd/react.production.min.js'),
+             'react-dom': path.resolve(__dirname, './node_modules/react-dom/umd/react-dom.production.min.js'),
+        },
+       modules:[path.resolve(__dirname,'node_modules')],
+       extensions: ['.js'],//引入文件查找类型
+       mainFields: ['main']
+     }
+```
+
