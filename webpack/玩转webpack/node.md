@@ -1338,11 +1338,11 @@ module.exports = {
 ```json
 rules:{
     test: /.js$/,
-    include: path.resolve('src'),
+    include: path.resolve('src'),//包含
     use: [
         'happypack/loader'
     ],
-    exclude:'node_modules'
+    exclude:'node_modules'//排除
 }
 ```
 
@@ -1359,8 +1359,104 @@ rules:{
              'react-dom': path.resolve(__dirname, './node_modules/react-dom/umd/react-dom.production.min.js'),
         },
        modules:[path.resolve(__dirname,'node_modules')],
-       extensions: ['.js'],//引入文件查找类型
+       extensions: ['.js'],//查找文件查找类型
        mainFields: ['main']
      }
+```
+
+## 图片压缩
+
+要求： 基于 Node 库的 imagemin 或者 tinypng API  
+
+- Imagemin的优点分析  
+  - 支持定制选项
+  - 第三方优化插件pngquant
+  - 可以处理多种图片格式
+
+使用： 配置 image-webpack-loader  
+
+```json
+//$ npm install image-webpack-loader --save-dev
+rules: [{
+  test: /\.(gif|png|jpe?g|svg)$/i,
+  use: [
+    'file-loader',
+    {
+      loader: 'image-webpack-loader',
+      options: {
+        mozjpeg: {
+          progressive: true,
+        },
+        // optipng.enabled: false will disable optipng
+        optipng: {
+          enabled: false,
+        },
+        pngquant: {
+          quality: [0.65, 0.90],
+          speed: 4
+        },
+        gifsicle: {
+          interlaced: false,
+        },
+        // the webp option will enable WEBP
+        webp: {
+          quality: 75
+        }
+      }
+    },
+  ],
+}]
+```
+
+## 擦出无用CSS
+
+PurifyCSS: 遍历代码， 识别已经用到的 CSS class  
+
+```json
+// npm i purgecss-webpack-plugin -D
+//和 mini-css-extract-plugin 配合使用
+```
+
+uncss: HTML 需要通过 jsdom 加载， 所有的样式通过PostCSS解析， 通过document.querySelector 来识别在 html 文件里面不存在的选择器  
+
+```json
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
+//定义paths
+const PATHS = {
+    src: path.join(__dirname, 'src')
+};
+
+module:{
+    rules:[
+       {
+                test: /.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader'
+                ]
+       },
+	],
+},
+plugins:[
+      new MiniCssExtractPlugin({
+            filename: '[name]_[contenthash:8].css'
+        }),
+      new PurgecssPlugin({
+            paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),//绝对路径,支持多路径
+        })
+]
+```
+
+## 构建体积优化： 动态 Polyfill  
+
+![](polyfill.png)
+
+**Polyfill Service原理 : 识别 User Agent， 下发不同的 Polyfill**  
+
+polyfill.io 官方提供的服务  
+
+```json
+<script src="https://polyfill.io/v3/polyfill.min.js"></script>
 ```
 
