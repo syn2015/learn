@@ -1,4 +1,4 @@
-chapter1
+# chapter1
 
 ## webpack 查看命令
 
@@ -11,7 +11,7 @@ chapter1
 ## entry：
 
 ```json
-单⼊⼝： entry 是⼀个字符串 多⼊⼝： entry 是⼀个对象
+//单⼊⼝： entry 是⼀个字符串 多⼊⼝： entry 是⼀个对象
 module.exports = {
 	entry: './path/to/my/entry/file.js'
 };
@@ -47,7 +47,9 @@ module.exports = {
 };
 ```
 
-## loaders: **test指定匹配规则，use指定使用loader名称**
+## loaders: 
+
+**test指定匹配规则，use指定使用loader名称**
 
 ![](loaders.png)
 
@@ -65,8 +67,7 @@ module: {
 
 ```json
 plugins: [
-new HtmlWebpackPlugin({template:
-'./src/index.html'})
+	new HtmlWebpackPlugin({template:'./src/index.html'})
 ]
 ```
 
@@ -388,6 +389,12 @@ plugins: [
 + })
 ]
 ```
+
+## 生成雪碧图
+
+[sprite-smith-loader](https://github.com/sunft1996/sprite-smith-loader)
+
+[webpack-spritesmith](https://github.com/mixtur/webpack-spritesmith)
 
 # chapter3
 
@@ -1662,7 +1669,7 @@ webpack的编译都按照下面的钩子调用顺序执行
 - NormalModule
 - Compilation hooks  
 - Chunk 生成算法
-- 模块化： 增强代码可读性和维护性  
+- 模块化： 增强代码可读性和维护性  ll
 
 ```javascript
 ES module
