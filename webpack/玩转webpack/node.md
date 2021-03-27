@@ -1619,4 +1619,92 @@ const {
 
   ![](tapable-hooks-async-sync.png)
 
-  
+## Tapable 是如何和 webpack 联系起来的  
+
+## Webpack 流程篇  
+
+webpack的编译都按照下面的钩子调用顺序执行  
+
+![](webpack-flow.png)
+
+- **WebpackOptionsApply**  
+
+将所有的配置 options 参数转换成 webpack 内部插件
+使用默认插件列表 
+
+举例：
+
+```json
+·output.library -> LibraryTemplatePlugin
+·externals -> ExternalsPlugin
+·devtool -> EvalDevtoolModulePlugin, SourceMapDevToolPlugin
+·AMDPlugin, CommonJsPlugin
+·RemoveEmptyChunksPlugin   
+```
+
+- Compiler hooks  
+  - 流程相关：
+    ·(before-)run
+    ·(before-/after-)compile
+    ·make
+    ·(after-)emit
+    ·done
+  - 监听相关：
+    ·watch-run
+    ·watch-close  
+- Compilation
+  - Compiler 调用 Compilation 生命周期方法
+    ·addEntry -> addModuleChain
+    ·finish (上报模块错误)
+    ·seal  
+- ModuleFactory
+- Module
+- NormalModule
+- Compilation hooks  
+- Chunk 生成算法
+- 模块化： 增强代码可读性和维护性  
+
+```javascript
+ES module
+import * as largeNumber from 'large-number';
+// ...
+largeNumber.add('999', '1');
+
+CJS
+
+const largeNumbers = require('large-number');
+// ...
+largeNumber.add('999', '1');
+
+
+AMD
+require(['large-number'], function (large-number) {
+// ...
+largeNumber.add('999', '1');
+});
+```
+
+- AST 基础知识  
+  - 抽象语法树（abstract syntax tree 或者缩写为 AST） ， 或者语法树（syntax tree） ， 是
+    源代码的抽象语法结构的树状表现形式， 这里特指编程语言的源代码。 树上的每个节点都
+    表示源代码中的一种结构。  [演示](https://esprima.org/demo/parse.html)
+
+## webpack模块机制
+
+1. 打包出来的是一个 IIFE (匿名闭包)  
+2. modules 是一个数组， 每一项是一个模块初始化函数  
+3. __webpack_require 用来加载模块， 返回 module.exports  
+4. 通过 WEBPACK_REQUIRE_METHOD(0) 启动程序  
+
+## 简易webpack
+
+```json
+可以将 ES6 语法转换成 ES5 的语法
+	通过 babylon 生成AST
+·	通过 babel-core 将AST重新生成源码
+可以分析模块之间的依赖关系
+	通过 babel-traverse 的 ImportDeclaration 方法获取依赖属性
+生成的 JS 文件可以在浏览器中运行
+	
+```
+
