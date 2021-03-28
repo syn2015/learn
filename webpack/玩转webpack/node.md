@@ -77,7 +77,7 @@ plugins: [
 
 ## 解析 ES6  
 
-.babelrc文件
+
 
 ```json
 npm i @babel/core @babel/preset-env babel-loader -D
@@ -95,6 +95,7 @@ npm i @babel/core @babel/preset-env babel-loader -D
 ```
 
 ```json
+//.babelrc文件
 //增加ES6的babel preset配置
 {
     "presets": [
@@ -134,7 +135,6 @@ npm i react-dom @babel/preset-react -D
     ],
     "plugins": [
    	 "@babel/proposal-class-properties",
-     "@babel/proposal-class-properties"
     ]
 }
 ```
@@ -142,7 +142,7 @@ npm i react-dom @babel/preset-react -D
 ## CSS解析：
 
 ```json
-npm install style-loader css-loader less less-loader -D
+// npm install style-loader css-loader less less-loader -D
 + module: {
     + rules: [
         + {
@@ -173,7 +173,7 @@ npm install file-loader -D
 module: {
     rules: [
         + {
-            + test: /\.(png|svg|jpg|gif)$/,
+            + test: /\.(png|svg|jpg|gif|jpeg)$/,
             + use: [
             + 'file-loader'
             + ]
@@ -191,14 +191,14 @@ npm install file-loader -D
       {
         + test: /\.(woff|woff2|eot|ttf|otf)$/,
         + use: [
-        + 'file-loader'
+        	+ 'file-loader'
         + ]
     + }
     ]
 + }
 ```
 
-## 资源解析解析：
+## 资源解析：
 
 url-loader处理图片和字体，设置较小的资源自动base64
 
@@ -207,11 +207,11 @@ npm install url-loader -D
 + module: {
     + rules: [
        {
-        + test: /\.(png|svg|jpg|gif)$/,
+        + test: /\.(png|svg|jpg|gif|jped)$/,
         + use: [{
             + loader: 'url-loader’,
             + options: {
-                + limit: 10240
+                + limit: 10240 //小于10KB大小会被base64
     		+ }
         + }]
    	 + }
@@ -255,7 +255,7 @@ module.export = {
 
 ## 热更新：
 
- webpack-dev-server  搭配HotModuleReplacementPlugin插件  ,不刷新浏览器，不输出文件而是放在内存中。
+ **webpack-dev-server**  搭配**HotModuleReplacementPlugin插件**  ,不刷新浏览器，不输出文件而是放在内存中。
 
 ```json
 //webpack-dev-server在开发状态下使用
@@ -266,8 +266,8 @@ plugins:[
     new webpakc.HotModuleReplacementPlugin()
 ],
 devServer:{
-    contentBase:'./dist',
-    hot:true
+    contentBase:'./dist',//监听的目录
+    hot:true //开启热更新
 }
 
 
@@ -279,7 +279,7 @@ devServer:{
 },
 ```
 
-热更新： 使⽤ webpack-dev-middleware  .WDM 将 webpack 输出的⽂件传输给服务器  
+热更新： 使⽤ **webpack-dev-middleware**  .WDM 将 webpack 输出的⽂件传输给服务器  
 
 ```json
 //webpack.config.js
@@ -318,9 +318,9 @@ app.listen(3000, function () {
 
 打包后输入的文件名的后缀（生成模式下使用，不能与HotModuleReplacementPlugin一起使用）
 
-1. Hash：**和整个项⽬的构建相关**，只要**项⽬⽂件有修改**，整个项⽬构建的 hash 值就会更改
-2. Chunkhash**：和 webpack 打包的 chunk 有关**，不同的 entry 会⽣成不同的 chunkhash 值
-3. Contenthash：**根据⽂件内容来定义 hash** ，⽂件内容不变，则 contenthash 不变  
+1. **Hash**：**和整个项⽬的构建相关**，只要**项⽬⽂件有修改**，整个项⽬构建的 hash 值就会更改
+2. **Chunkhash：和 webpack 打包的 chunk 有关**，不同的 entry 会⽣成不同的 chunkhash 值
+3. **Contenthash**：**根据⽂件内容来定义 hash** ，⽂件内容不变，则 contenthash 不变  
 
 ```json
 //JS文件:设置output的filename,使用[chunkhash]
@@ -329,9 +329,17 @@ output: {
     path: __dirname + '/dist'
 }
 
-//MiniCssExtractPlugin(写作：MiniCssExtractPlugin.loader)不能实style-loader一起使用
-
+//MiniCssExtractPlugin(写作：MiniCssExtractPlugin.loader)不能和style-loader一起使用
+//npm i mini-css-extract-plugin -D
 //CSS文件：设置 MiniCssExtractPlugin (抽离CSS单文件)的 filename，使⽤ [contenthash]
+rules:[
+    {test:/\.css$/,
+     use:[
+         MiniCssExtractPlugin.loader,//替换原来的style-loader
+         'css-loader'
+     ]
+    }
+],
 plugins: [
     + new MiniCssExtractPlugin({
    		 + filename: `[name]_[contenthash:8].css`
@@ -362,7 +370,7 @@ rules: [
 //JS压缩：webpack4内置uglifyjs-webpack-plugin
 
 //CSS压缩：使⽤ optimize-css-assets-webpack-plugin
-//同时使⽤ cssnano
+//同时使⽤ cssnano 预处理器
 //npm install optimize-css-assets-webpack-plugin cssnano -D 
 plugins: [
     + new OptimizeCSSAssetsPlugin({
@@ -395,6 +403,12 @@ plugins: [
 [sprite-smith-loader](https://github.com/sunft1996/sprite-smith-loader)
 
 [webpack-spritesmith](https://github.com/mixtur/webpack-spritesmith)
+
+## name跳转vue
+
+[vue-component-finder](https://github.com/csonlai/vue-component-finder)
+
+[launch-editor](https://github.com/yyx990803/launch-editor)
 
 # chapter3
 
