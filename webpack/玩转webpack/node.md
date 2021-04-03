@@ -619,10 +619,11 @@ const glob = require('glob');
 const setMPA=()=>{
     const entry={};
     const htmlWebpackPlugins=[];
+    //返回字符串类型数组
     const entryFiles=glob.sync(path.join(__dirname, './src/*/index.js'));//同步获取
     Object.keys(entryFiles).map((index)=>{
         const entryFile=entryFiles[index];
-        //获取文件名称
+        //正则匹配获取文件名称
         const match = entryFile.match(/src\/(.*)\/index\.js/);
         /*match的内容*/
         //['src/index/index.js','index',index:27,input:'带有盘符的路径',groups:undefined]
@@ -660,10 +661,10 @@ const { entry, htmlWebpackPlugins } = setMPA();
 
 2. source map关键字
 
-   - eval: 使⽤eval包裹模块代码，不产生map文件
+   - **eval**: 使⽤eval包裹模块代码，不产生map文件
    - source map: 产⽣.map⽂件  
-   - cheap: 不包含列信息
-   - inline: 将.map作为DataURI嵌⼊，不单独⽣成.map⽂件
+   - **cheap**: 不包含列信息
+   - **inline: 将.map作为DataURI嵌⼊**，不单独⽣成.map⽂件
    - module:包含loader的sourcemap  
 
 3. source map类型
@@ -672,7 +673,7 @@ const { entry, htmlWebpackPlugins } = setMPA();
 
    
 
-## <a name="基础库分离"><a>
+## 基础库分离
 
 使⽤ html-webpackexternals-plugin  
 
@@ -711,10 +712,10 @@ webpack4内置，替代CommonsChunkPlugin插件
 //分离公共脚本
 optimization: {
     splitChunks: {
-        chunks: 'async',
+        chunks: 'async',//
         minSize: 30000,
-        maxSize: 0,
-        minChunks: 1,
+        maxSize: 0,//分离包的体积大小
+        minChunks: 1,//设置最小引用次数为2
         maxAsyncRequests: 5,
         maxInitialRequests: 3,
         automaticNameDelimiter: '~',
@@ -771,22 +772,22 @@ chunks:['commons',pageName],
 
 **概念：** 1 个模块可能有多个⽅法，只要其中的某个⽅法使⽤到了，则整个⽂件都会被打到bundle ⾥⾯去， tree shaking 就是只把⽤到的⽅法打⼊ bundle ， 没⽤到的⽅法会在uglify 阶段被擦除掉。  
 
-1. webpack 默认⽀持，在 .babelrc ⾥设置 modules: false 即可
+1. **webpack 默认⽀持，在 .babelrc ⾥设置 modules: false 即可**
 
 2. production mode的情况下默认开启  
-3. 要求：必须是 ES6 的语法， CJS 的⽅式(require)不⽀持
+3. **要求：必须是 ES6 的语法， CJS 的⽅式(require)不⽀持**
 
 **DCE (Dead code elimination)**  
 
-- 特点是代码不会被执⾏，不可到达  
-- 代码执⾏的结果不会被⽤到  
-- 代码只会影响死变量（只写不读）  
+- **特点是代码不会被执⾏，不可到达**  
+- **代码执⾏的结果不会被⽤到**  
+- **代码只会影响死变量（只写不读）**  
 
 **tree-shaking原理**
 
-1. 利⽤ ES6 模块的特点:
+1. **利⽤ ES6 模块的特点:**
    - ·只能作为模块顶层的语句出现
-   - · import 的模块名只能是字符串常量
+   - · import 的**模块名只能是字符串常量**
    - · import binding 是 immutable的
    - 代码擦除： uglify 阶段删除⽆⽤代码  
 
@@ -804,10 +805,10 @@ chunks:['commons',pageName],
 **模块转换分析**  
 
 1. ·被 webpack 转换后的模块会带上⼀层包裹
-2. ·import 会被转换成 __webpack_require  
+2. **·import 会被转换成 __webpack_require**  
 3. 打包出来的是⼀个 IIFE (匿名闭包)  
-4. modules 是⼀个数组，每⼀项是⼀个模块初始化函数  
-5. __webpack_require ⽤来加载模块，返回 module.exports  
+4. **modules 是⼀个数组，每⼀项是⼀个模块初始化函数**  
+5. **__webpack_require ⽤来加载模块，返回 module.exports**  
 6. 通过 WEBPACK_REQUIRE_METHOD(0) 启动程序  
 
 **scope hoisting使用**
@@ -829,18 +830,18 @@ webpack mode 为 production 默认开启
 
 **代码分割**
 
-对于⼤的 Web 应⽤来讲，将所有的代码都放在⼀个⽂件中显然是不够有效的，特别是当你的某些代码块是在某些特殊的时候才会被使⽤到。 webpack 有⼀个功能就是将你的代码库分割成chunks（语块），当代码运⾏到需要它们的时候再进⾏加载。  
+对于⼤的 Web 应⽤来讲，将所有的代码都放在⼀个⽂件中显然是不够有效的，特别是当你的某些代码块是在某些特殊的时候才会被使⽤到。 **webpack 有⼀个功能就是将你的代码库分割成chunks（语块），当代码运⾏到需要它们的时候再进⾏加载。**  
 
 **适用场景**
 
-1. 抽离相同代码到⼀个共享块  
-2. 脚本懒加载，使得初始下载的代码更⼩  
+1. **抽离相同代码到⼀个共享块**  
+2. **脚本懒加载，使得初始下载的代码更⼩**  
 
 **懒加载JS脚本的方式**
 
-1. CommonJS:require.ensure
+1. **CommonJS:require.ensure**
 
-2. ES6:动态import(目前还没有原生支持，需要babel转换)
+2. **ES6**:动态import(目前还没有原生支持，需要babel转换)
 
    ```json
    //
