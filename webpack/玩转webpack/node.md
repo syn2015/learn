@@ -426,6 +426,8 @@ plugins: [
 ]
 ```
 
+## ⾃动补⻬ CSS3 前缀  
+
 PostCSS 插件 autoprefixer ⾃动补⻬ CSS3 前缀  
 
 ```json
@@ -458,76 +460,76 @@ rules: [
 使用px2rem-loader
 
 ```json
-//npm i px2rem-loader -D
+//npm i px2rem-loader -D 开发依赖
 //npm i lib-flexible -S  生产依赖
 rules: [
-{
-    test: /\.less$/,
-    use: [
-    'style-loader',
-    'css-loader',
-    'less-loader',
-    + {
-        + loader: "px2rem-loader",
-        + options: {
-            + remUnit: 75,//1rem等于75px
-            + remPrecision: 8 //保留小数点
+    {
+        test: /\.less$/,
+        use: [
+        'style-loader',
+        'css-loader',
+        'less-loader',
+        + {
+            + loader: "px2rem-loader",
+            + options: {
+                + remUnit: 75,//1rem等于75px,适合750设计稿
+                + remPrecision: 8 //保留小数点
+            + }
         + }
-    + }
-    ]
-}
+        ]
+    }
 ]	
 ```
 
-flexible.js包不支持内联
+flexible.js包以script标签方式,需要优先执行,放置在最前方
 
 ```html
 //index.html
 <script>
     (function flexible (window, document) {
-  var docEl = document.documentElement
-  var dpr = window.devicePixelRatio || 1
+      var docEl = document.documentElement
+      var dpr = window.devicePixelRatio || 1
 
-  // adjust body font size
-  function setBodyFontSize () {
-    if (document.body) {
-      document.body.style.fontSize = (12 * dpr) + 'px'
-    }
-    else {
-      document.addEventListener('DOMContentLoaded', setBodyFontSize)
-    }
-  }
-  setBodyFontSize();
+      // adjust body font size
+      function setBodyFontSize () {
+        if (document.body) {
+          document.body.style.fontSize = (12 * dpr) + 'px'
+        }
+        else {
+          document.addEventListener('DOMContentLoaded', setBodyFontSize)
+        }
+      }
+      setBodyFontSize();
 
-  // set 1rem = viewWidth / 10
-  function setRemUnit () {
-    var rem = docEl.clientWidth / 10
-    docEl.style.fontSize = rem + 'px'
-  }
+      // set 1rem = viewWidth / 10
+      function setRemUnit () {
+        var rem = docEl.clientWidth / 10
+        docEl.style.fontSize = rem + 'px'
+      }
 
-  setRemUnit()
-
-  // reset rem unit on page resize
-  window.addEventListener('resize', setRemUnit)
-  window.addEventListener('pageshow', function (e) {
-    if (e.persisted) {
       setRemUnit()
-    }
-  })
 
-  // detect 0.5px supports
-  if (dpr >= 2) {
-    var fakeBody = document.createElement('body')
-    var testElement = document.createElement('div')
-    testElement.style.border = '.5px solid transparent'
-    fakeBody.appendChild(testElement)
-    docEl.appendChild(fakeBody)
-    if (testElement.offsetHeight === 1) {
-      docEl.classList.add('hairlines')
-    }
-    docEl.removeChild(fakeBody)
-  }
-}(window, document))
+      // reset rem unit on page resize
+      window.addEventListener('resize', setRemUnit)
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          setRemUnit()
+        }
+      })
+
+      // detect 0.5px supports
+      if (dpr >= 2) {
+        var fakeBody = document.createElement('body')
+        var testElement = document.createElement('div')
+        testElement.style.border = '.5px solid transparent'
+        fakeBody.appendChild(testElement)
+        docEl.appendChild(fakeBody)
+        if (testElement.offsetHeight === 1) {
+          docEl.classList.add('hairlines')
+        }
+        docEl.removeChild(fakeBody)
+      }
+    }(window, document))
 </script>
 ```
 
@@ -548,7 +550,7 @@ flexible.js包不支持内联
    - 减少HTTP请求,比如⼩图⽚或者字体内联 (url-loader)  
 
 ```html
-//npm i raw-loader@0.5.1 -D
+//npm i raw-loader@0.5.1 -D 开发依赖
 
 //raw-loader0.5.1版本 内联 html
 
@@ -617,7 +619,7 @@ const glob = require('glob');
 const setMPA=()=>{
     const entry={};
     const htmlWebpackPlugins=[];
-    const entryFiles=glob.sync(path.join(__dirname, './src/*/index.js'));
+    const entryFiles=glob.sync(path.join(__dirname, './src/*/index.js'));//同步获取
     Object.keys(entryFiles).map((index)=>{
         const entryFile=entryFiles[index];
         //获取文件名称
