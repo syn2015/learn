@@ -828,7 +828,7 @@ webpack mode 为 production 默认开启
 必须是 ES6 语法， CJS(require) 不⽀持
 ```
 
-**代码分割**
+## 代码分割
 
 对于⼤的 Web 应⽤来讲，将所有的代码都放在⼀个⽂件中显然是不够有效的，特别是当你的某些代码块是在某些特殊的时候才会被使⽤到。 **webpack 有⼀个功能就是将你的代码库分割成chunks（语块），当代码运⾏到需要它们的时候再进⾏加载。**  
 
@@ -1005,7 +1005,7 @@ devServer:{
 ```json
 //npm i friendly-errors-webpack-plugin  -D
 plugins: [
-+ new FriendlyErrorsWebpackPlugin()
+	+ new FriendlyErrorsWebpackPlugin()
 ],
 
 ```
