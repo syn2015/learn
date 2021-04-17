@@ -932,6 +932,9 @@ output: {
     libraryExport: "default",//指定库的使用方式：default,可以不用new的方式
     libraryTarget: "umd"//库的引用方式
 }
+
+
+
 //.min的压缩，include设置只压缩min.js结尾的文件
 // npm i terser-webpack-plugin -D 安装压缩库 ，webpack4内置生产环境下启用
 mode:'none',//首先设置none
@@ -943,6 +946,9 @@ optimization: {
         }),
     ],
 }
+
+
+
 //设置入口文件：package.json的main字段为index.js
 //package.json里增加钩子prepublish
 "prepublish":"webpack"
@@ -959,44 +965,44 @@ module.exports = require("./dist/large-number.js");
 
 ## SSR
 
-服务器渲染特点
+**服务器渲染特点**
 
 - 所有模板等资源都存储在服务端  
 - 内⽹机器拉取数据更快  
 - ⼀个 HTML 返回所有数据  
 
-SSR的优势
+**SSR的优势**
 
 - 减少白屏时间
 - 对SEO友好
 
 SSR实现思路(React)
 
-​		服务器
+​		**服务器**
 
 - 使⽤ react-dom/server 的 renderToString ⽅法将
-  React 组件渲染成字符串  
+  React 组件渲染成**字符串**  
 
-- 服务端路由返回对应的模板  
+- 服务端路由**返回对应的模板**  
 
-  客户端
+  **客户端**
 
 - 打包出针对服务端的组件  
 
-webpack ssr打包存在的问题
+**webpack ssr**打包存在的问题
 
-- 浏览器的全局变量 (Node.js 中没有 document, window)  
+- 浏览器的全局变量 **(Node.js 中没有 document, window**)  
   - 组件适配：将不兼容的组件根据打包环境进⾏适配  
   - 请求适配：将 fetch 或者 ajax 发送请求的写法改成 isomorphic-fetch 或者 axios  
 - 样式问题 (Node.js ⽆法解析 css)  
   - 方案一:  服务端打包通过 ignore-loader 忽略掉 CSS 的解析  
-  - 方案二:  将 style-loader 替换成 isomorphic-style-loader  
+  - 方案二:  将 style-loader 替换成 **isomorphic-style-loader**  
 
-解决样式不显示的问题
+**解决样式不显示的问题**
 
-- 使⽤打包出来的浏览器端 html 为模板  
+- **使⽤打包出来的浏览器端 html 为模板**  
 
-- 设置占位符，动态插⼊组件  
+- **设置占位符，动态插⼊组件**  
 
 ⾸屏数据 处理
 
@@ -1034,10 +1040,10 @@ plugins: [
 
 ##　构建异常和中断
 
-1. 在 CI/CD 的 pipline 或者发布系统需要知道当前构建状态  每次构建完成后输⼊ echo $? 获取错误码  
-2. webpack4 之前的版本构建失败不会抛出错误码 (error code)  
-3. Node.js 中的 process.exit 规范  
-   - 0 表示成功完成，回调函数中， err 为 null  
+1. 在 CI/CD 的 pipline 或者发布系统需要知道当前构建状态  每次构建完成后输⼊ **echo $? 获取错误码**  
+2. **webpack4 之前的版本构建失败不会抛出错误码 (error code)**  
+3. Node.js 中的 **process.exit 规范**  
+   - **0 表示成功完成**，回调函数中， err 为 null  
    - ⾮ 0 表示执⾏失败，回调函数中， err 不为 null， err.code 就是传给 exit 的数字  
 
 **主动捕获处理构建错误**
@@ -1069,6 +1075,32 @@ plugins: [
 2. 将构建配置设计成一个库， 比如： hjs-webpack、 Neutrino、 webpack-blocks  
 3. 抽成一个工具进行管理， 比如： create-react-app, kyt, nwb  
 4. 将所有的配置放在一个文件， 通过 --env 参数控制分支选择  
+
+## 功能模块设计
+
+![](构建-功能模块设计.jpg)
+
+## 目录结构设计
+
+lib放置源代码
+
+test放置测试代码
+
+```bash
++ |- /test
++ |- /lib
+    + |- webpack.dev.js
+    + |- webpack.prod.js
+    + |- webpack.ssr.js
+    + |- webpack.base.js
++ |- README.md
++ |- CHANGELOG.md
++ |- .eslinrc.js
++ |- package.json
++ |- index.js
+```
+
+
 
 **ESLint规范构建脚本**
 
