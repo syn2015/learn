@@ -854,13 +854,16 @@ webpack mode 为 production 默认开启
 
 ## ESLint
 
-基于 eslint:recommend 配置并改进  
+基于 **eslint:recommend** 配置并改进  
 
-和CI/CD集成
+ESLint执行落地
+
+1. 和CI/CD集成
+
 
 ![](eslint-CI-CD.png)
 
-和webpack集成
+2.和webpack集成
 
 
 
@@ -881,8 +884,8 @@ module: {
 }
 //.eslintrc.js文件
 module.exports = {
-    "parser": "babel-eslint",//解析器
-    "extends": "airbnb",//继承airbnb配置
+    "parser": "babel-eslint",//指定解析器
+    "extends": "airbnb",//继承airbnb配置,继承多个写成数组
     "env": {
         "browser": true,//环境变量
         "node": true
@@ -893,7 +896,26 @@ module.exports = {
 };
 ```
 
-## 打包组件和库
+本地开发阶段增加precommit钩子
+
+```json
+//安装husky
+
+npm install husky --save-dev
+//增加npm script 通过lint-staged增量检查修改的文件
+"scripts": {
+	"precommit": "lint-staged"
+},
+"lint-staged": {
+    "linters": {
+   	 	"*.{js,scss}": ["eslint --fix", "git add"]
+    }
+},
+```
+
+
+
+## 打包组件和JS库
 
 
 
