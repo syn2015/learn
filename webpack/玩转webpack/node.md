@@ -1078,7 +1078,7 @@ plugins: [
 
 ## 功能模块设计
 
-![](构建-功能模块设计.jpg)
+<img src="构建-功能模块设计.jpg" style="zoom:150%;" />
 
 ## 目录结构设计
 
@@ -1128,6 +1128,9 @@ module.exports = {
 //安装删除库 npm i rimraf -D 
 //安装测试库 npm i mocha -D
 //安装glob-all npm i glob-all -D
+
+
+//rimrfa删除dist目录；process.dir(path.join(__dirname,'template'))进入指定目录
 ```
 
 
@@ -1144,6 +1147,12 @@ module.exports = {
 //script
 "scripts": {
 	"test": "node_modules/mocha/bin/_mocha”
+},
+
+//npm install -g istanbul  测试覆盖率包
+//script
+"scripts": {
+	"test": "istanbul cover ./node_modules/mocha/bin/_mocha”
 },
 ```
 
