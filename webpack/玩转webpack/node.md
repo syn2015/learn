@@ -1208,16 +1208,16 @@ module.exports = {
 
 **语义化版本（Semantic Versioning） 规范格式**  
 
-1. 主版本号： 当你做了不兼容的 API 修改，  
-2. 次版本号： 当你做了向下兼容的功能性新增  
-3. 修订号： 当你做了向下兼容的问题修正  
+1. 主版本号： **当你做了不兼容的 API 修改，**  
+2. 次版本号： **当你做了向下兼容的功能性新增**  
+3. 修订号： **当你做了向下兼容的问题修正**  
 
 **先行版本号**  
 
-作为发布正式版之前的版本， 格式是在修订版本号后面加上一个连接号（-） ， 再加上一连串以点（.） 分割的标识符， 标识符可以由英文、 数字和连接号（[0-9A-Za-z-]） 组成。  
+作为发布正式版之前的版本， 格式是在**修订版本号后面加上一个连接号（-）** ， 再加上一连串以点（.） 分割的标识符， 标识符可以由英文、 数字和连接号（[0-9A-Za-z-]） 组成。  
 
-- alpha： 是内部测试版， 一般不向外部发布， 会有很多 Bug。 一般只有测试人员使用。
-- beta： 也是测试版， 这个阶段的版本会一直加入新的功能。 在 Alpha 版之后推出
+- alpha： 是**内部测试版**， 一般不向外部发布， 会有很多 Bug。 一般只有测试人员使用。
+- beta： 也是**测试版**， 这个阶段的版本会一直加入新的功能。 在 Alpha 版之后推出
 - rc： Release Candidate) 系统平台上就是发行候选版本。 RC 版不会再加入新的功能了， 主
   要着重于除错。 
 
@@ -1244,12 +1244,13 @@ module.exports = {
 //npm i speed-measure-webpack-plugin --save-dev
 const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
 const smp = new SpeedMeasureWebpackPlugin();
+//包裹原先的webpack 插件
 const webpackConfig = smp.wrap({
   plugins: [new MyPlugin(), new MyOtherPlugin()],
 });
 ```
 
-**webpack-bundle-analyzer  分析体积**
+## **webpack-bundle-analyzer  分析体积**
 
 ```json
 //npm install --save-dev webpack-bundle-analyzer
