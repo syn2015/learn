@@ -1,0 +1,789 @@
+<!DOCTYPE html> <html style><!--
+ Page saved with SingleFile 
+ url: http://www.shuaihuajun.com/article/1504749640971/ 
+ saved date: Sat May 01 2021 12:21:34 GMT+0800 (中国标准时间)
+--><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1, maximum-scale=1"><title>[译] socket.io官方文档·上篇</title><meta name=author content=陈帅华><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><meta name=keywords content=WebSocket><meta name=description content=socket.io基于WebSocket协议封装，兼容不支持ws的浏览器采用ajax轮询，socket.io为开发者提供服务端和客户端两套库，无需了解全部ws底层原理，好入门，上手快。学会socket.io后可搭建类似QQ和微信这种即时通信工具的Web版，既可以一对一对话也可开房间组队创建聊天群组，我尝试过传输的媒体类型有文本、图像两种，数据都可由1和0表示，所以理论上可传输任何媒体形式。><style>*{position:relative;box-sizing:border-box}body{font-size:16px;font-family:"Noto Serif",serif}body,p{margin:0}#article_copyright{border:1px solid #e6e6e6;padding:1em;margin-top:3em}#article_index{background-color:#fafafa;border:1px solid #efefef}#article_index_title{padding:8px 16px;background-color:#f7f7f7;border-bottom:1px solid #efefef}#article_index_content{padding:16px}#back_to_top{z-index:111;position:fixed;right:30px;bottom:40px;width:44px;height:44px;transition:all 270ms}.goma{width:1020px;max-width:100%;padding:0 20px;margin:0 auto;font-size:1em;letter-spacing:.15em;line-height:1.75em}.shj{border-bottom:1px solid #f1f1f1;padding:2em 0 1em;margin-bottom:2em;display:flex;align-items:center;justify-content:space-between}.shj .te .lo>svg{margin-right:.4em}.shj .sm{filter:grayscale(1);display:flex;align-items:center}.shj .sm a{margin-right:1.2em}.shj .sm a:last-child{margin-right:0}.shj .sm a svg{display:block}@media (max-width:768px){.shj{display:block;padding-bottom:.6em}.sm{margin-top:.8em}}.goma-content{margin-top:0em;display:flex}.goma-content::after{clear:both;content:"";display:block}img{max-width:100%}a{color:#222;text-decoration:none}a:hover{color:#217a4c}@keyframes analytics_tip_ani{0%{opacity:0;transform:translate3D(-50%,-150%,0)}100%{opacity:1;transform:translate3D(-50%,-100%,0)}}.main-content{margin-right:2em;flex:1}.month-idea{width:160px;flex-shrink:0;margin-top:1em}.month-idea-item{display:block;padding:4px 0;font-size:14px;font-weight:lighter;color:#232323}.month-idea-item.selected{font-weight:bold;color:#217a4c}@media screen and (max-width:768px){.goma-content{flex-direction:column;margin-top:2em}.main-content{margin-right:0;flex:auto;margin-bottom:2em}.month-idea{width:auto}.month-idea-item{border-bottom:1px solid #efefef;padding:8px 0}}footer{margin:3em 0}.hljs-comment{color:#8d8687}.hljs-name,.hljs-tag{color:#ef6155}.hljs-built_in,.hljs-literal,.hljs-number,.hljs-params{color:#f99b15}.hljs-title{color:#fec418}.hljs-string{color:#48b685}.hljs-keyword{color:#815ba4}.hljs{display:block;overflow-x:auto;background:#2f1e2e;color:#a39e9b;padding:.5em}.mb{color:#333;font-size:1.2em;line-height:1.75;margin-bottom:5em;max-width:760px;letter-spacing:0}.mb a{color:#154286}.mb h1{font-size:1.5em;margin:0 0 1.2em}.mb h2{font-size:1.3em;margin-top:2.5em;border-top:1px solid #efefef;padding-top:1em}.mb pre{margin:1em 0}.mb p{margin:1.5em 0 1em}.mb ul{margin:1em 2em 1em 1em}.mb ul li{margin-bottom:1.25em}.mb pre code{display:inline;padding:0;margin:0;overflow:visible;line-height:inherit;background-color:transparent;font-size:100%;word-break:normal;white-space:pre;border:0}.mb code{border-radius:3px}</style><link rel="shortcut icon" href=data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyVpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzI0MTQ5RjAzRkVBMTFFQUI5MDJEODAyM0QxMUVBNDgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzI0MTQ5RUYzRkVBMTFFQUI5MDJEODAyM0QxMUVBNDgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5MzEzMzRFRjNCQ0YxMUVBOUMwMEIwQzg2MzBFQzQ4RiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5MzEzMzRGMDNCQ0YxMUVBOUMwMEIwQzg2MzBFQzQ4RiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkomIWAAAATqSURBVHjaxFcNUFRVFP6W/XEhVmAXd/aHEGjCgCBDiGAwxU2SQQiJEE0HIZ2mDKeIJJw0NBsHy2YQ6WfMvyazqQa0BtSaQG1QKMGmQZDUXBBYliAB+V1gb/ddFtqFZRsM4cx8u+/dd8493zv33HPf4RFCYEVEFHEmhFKoTGNTkW6KRoorFIUUpygME7Q4AuOwiuI6mX7h5owf78/8hk+RQ+6/5Jh8TSAwE87NSVgQSCAzL5xP8OgPl1w3Kdwws9JE4WVHf56fBeecqCkS7UxbbbYkjiMQPN2z/lRSCc2yV9DfP7Ltq6v/RFFRmTXVII6AYjqd9/YZEKlJBY/Hg1AoYGPRK1/D0SNF1tSVME/Lzs5u8smnhaStreOeUzs8fCNRKzWkp6eP3RcVlxGJ41Ki13da1bcg0NXVQ3jwIwc/O2WhVHWljtTU3PpP5xlv5nJ1nWzNzGf3TU2tJCxsIxGLnqDE1pHolekTbOzM4yGROMB7gQ9KSyst4rQl7QO8veOgzdBnbt2Pfe/nImhRPLp7ejA8NIzVidtw6WIxPDxUkMqckJISDWtngYVERLxMNMtftRgLCUkmDvaBZG1SFklev51UVFy1eJ67/2saOTU5fbqMvLPzCImJzSBGIyHl5dVEpYgkBYXnJ40ai8CJr37EocPfMUJuajkc7Oew67M/lMP74Vj8UnERKiXNVR4fFb/WInF1Fnp7+8deorCgBHty9mDFijDUXL2OgQEDTUIgJMQP4AtRX6+bkKhnzlxiVZil6YWfq1DwbQleTI2FUCyATOSMa3X1iHomGZs3b4BarUJgsB8NcRoaGlrh5REDmhMICvJhE5aWfjw2eXt7B+5297LrlpZ2hIYGYNtbefB95EHAjo/Ky7XIzs6Hi9QVuubiEQKPBXjj6KHvmZFxiEAkngOtthlyhSfyDmQhOXkXbjfo2fOamptwcpFAJnO2mgvZ2ZtgNBrZ9eOB6/BRfiYe9fdESupOiMUO6O8bQFzsEuzanca2KiOgVMpgGLjLjBwlYrS1ddGQz2OJpL3VTP+HwOeP5Ouxz4vh5CSBp6fSKoHF4QvHrlt1zaDHDbJ3bGLgxGAYhEgkHNNhBJ5avBDnLhxjA3K5DL9V/QGpVIK/29rR+tcdCKnB8MAgex4a6g+NxnrxpNuYohct+na4OEuonQSNjXr00bceGjLSXWZv4dzqLtj93mGiUEbRmtBNvjh+lhWnZ2PfIElrttusAefOVxEvz2jipo4iTs4RRCp7mvD5IcTVdTnx8U0krtInyb4Pj0+wE4x/C25dWnV6ODra44W1kWyso6MbApHtT8IF3u60VrwE+TwXtu+1NPNjo7cgPmEZli4JpKHvo8szMXICa5MRngDDw0YIBCPrrtXq4OfvZZOAQiFDyoaYsXs/Py9qL0ZwkC/WJEVOascR4LJPMjrAJYm7u4Ia/8vtyxPvYv78qZ9Zbu5y3Lhx25aKgfOiMyfg4CCGs7OjhVZYWMA9nYxz5z6AVv0dWyo6Lsa/m4/I5VLU0iIzupf/j3AVte6a1pbKZS4CJykSRkdUKlf40vWbpGGZkqRnrGe1xIacnO2P0ofsTO1S+ix8D75OMWDemOydwZ5g72StWd4MOD8wWWs2iufuY3OaMN4fz0Z7zjUsqygWmZoI4RTXeNCUaJWm9vwba+35PwIMABA5JhDqELuLAAAAAElFTkSuQmCC><link rel=canonical href=http://www.shuaihuajun.com/article/1504749640971/><body><div class=goma><div class=shj><div class=te><a class=lo href=http://www.shuaihuajun.com/ title=帅华君个站主页><svg viewBox="0 0 1024 1024" width=28><path d="M236.2 51.9c-30.9 11.9-46.3 46.6-34.4 77.6 30.8 79.8 47.6 237 41.8 391.3-7.2 193.5-45.2 297.5-75.5 327.9-23.4 23.4-23.4 61.4 0 84.9 11.7 11.7 27.1 17.6 42.4 17.6s30.7-5.9 42.4-17.6c36-36 62.9-93.2 82.1-174.9 15.4-65.5 25.3-146.2 28.5-233.4 6.4-171.6-13.2-343.9-49.8-438.9-11.9-31-46.6-46.4-77.5-34.5zM56.5 251.8c-32.1 8-51.7 40.6-43.7 72.8 20.9 83.6 20.9 235.9 0 319.5-8 32.1 11.5 64.7 43.7 72.8 4.9 1.2 9.8 1.8 14.6 1.8 26.9 0 51.3-18.2 58.2-45.5 25.6-102.4 25.6-275.4 0-377.7-8.1-32.2-40.7-51.7-72.8-43.7z m957.2 259.5c-12.7-95.6-51.7-173-112.6-223.8-55.8-46.6-126.6-68-199.4-60.4-34.7 3.6-68.1 13.7-99.1 29.9-31.9 16.6-59.7 39-82.9 66.4-24.3 28.8-42.5 62.2-53.9 99.1-12 38.7-16.3 80.6-13 124.6 2.4 31.5 28.7 55.4 59.8 55.4 1.5 0 3.1-0.1 4.7-0.2 33-2.5 57.8-31.4 55.2-64.4-4.2-54.6 9.3-102 38.9-137.1 25.7-30.4 63.1-50.2 102.8-54.4 40.2-4.2 79.3 7.6 110 33.2 37.5 31.3 61.9 82.3 70.6 147.6 4.4 32.8 34.6 55.9 67.4 51.5 32.8-4.4 55.9-34.6 51.5-67.4zM701.8 411.2c-31 11.6-46.8 46.2-35.1 77.2 9.2 24.7 15 55.8 16.8 90 1.8 36.5-1.1 74.9-8.6 111-16.5 79.8-52.9 141.9-102.5 175-27.6 18.4-35 55.6-16.6 83.2 11.6 17.3 30.6 26.7 50 26.7 11.4 0 23-3.3 33.2-10.1 40.9-27.3 75.3-65 102.3-112 23.3-40.7 40.5-87.3 51.1-138.5 19.3-93.5 14.3-193.4-13.3-267.4-11.7-31-46.3-46.7-77.3-35.1zM586.4 166.5c11.7 11.7 27.1 17.6 42.4 17.6s30.7-5.9 42.4-17.6c23.4-23.4 23.4-61.4 0-84.9L648 58.4c-23.4-23.4-61.4-23.4-84.9 0-23.4 23.4-23.4 61.4 0 84.9l23.3 23.2z"></path></svg><svg viewBox="0 0 1024 1024" width=28><path d="M372 485.3c0-33.1-26.9-60-60-60-42.6 0-78.5-14.8-103.8-42.8-23-25.4-36.3-60.9-36.6-97.3-0.3-34.9 11.2-66.9 32.4-89.9 24.8-27 61.6-41.1 109.1-41.9 33.1-0.6 59.5-27.9 58.9-61.1-0.6-33.1-27.9-59.5-61.1-58.9-101.6 1.8-162.2 44.8-195.2 80.6C73.8 159.6 51 220.7 51.6 286.3c0.3 32.1 6.1 63.5 17.3 93.5 11.7 31.1 28.6 59.1 50.2 83.1 23.3 25.8 51.2 46 82.9 60 33.5 14.8 70.5 22.4 110 22.4 33.1 0 60-26.9 60-60z m483-134.7c10.1-10.4 19.9-21.3 29.1-32.7 58.7-72.3 87.2-153.3 87.2-247.6 0-33.1-26.9-60-60-60s-60 26.9-60 60c0 66.6-19.2 121.2-60.4 172-10.9 13.4-22.9 26-35.6 38.1-2.7-1.7-5.4-3.3-8.1-5-98.2-60-153.3-98.9-144.9-200.1 2.8-33-21.8-62-54.8-64.8-33-2.7-62 21.8-64.8 54.8-3.5 41.8 0.5 80.8 11.7 115.8 10.3 32 27.1 61.8 49.9 88.6 31.7 37.3 71 64.8 110.9 89.9-2.4 1.7-4.7 3.4-7.1 5.1-45.8 33-89.1 64.1-123.6 102-43.8 48.3-65.1 99.6-65.1 156.8v78.3H289c-33.1 0-60 26.9-60 60s26.9 60 60 60h170.5v124.4c0 33.1 26.9 60 60 60s60-26.9 60-60V821.9h193.6c33.1 0 60-26.9 60-60s-26.9-60-60-60H579.5v-78.3c0-58.6 52.7-99.5 138.8-161.4 14.5-10.4 29.4-21.2 44.5-32.5 10.1 8.1 19.4 16.4 27.6 25.3 26.2 28.5 37.9 59.1 37.9 99.4 0 33.1 26.9 60 60 60s60-26.9 60-60c0-70.7-22.8-129.8-69.7-180.7-7.5-8.1-15.4-15.8-23.6-23.1z"></path></svg></a><div class=so>帅华君: 收听·传播新媒体技术/艺术</div></div><div class=sm><a href=https://github.com/lanserdi target=_blank title="GitHub: Shuaihua Chen"><svg height=22 viewBox="0 0 16 16" version=1.1 aria-hidden=true><path fill-rule=evenodd fill=#333 d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a><a href=https://juejin.im/user/57e54ee25bbb50005d4ce895 target=_blank title=掘金陈帅华><svg width=22 height=26 viewBox="0 0 84 70"><path fill=#333 d="M50.1219251,9.58631264 L43.0259809,4 L35.6121953,9.83662979 L35.2279087,10.1457646 L43.0259809,16.3537666 L50.8480281,10.1457646 L50.1219251,9.58631264 Z M77.011711,31.2503723 L43.0054308,58.0226799 L9.01970069,31.2667865 L4,35.2923786 L43.0054308,66 L82.0320967,35.2759644 L77.011711,31.2503723 Z M43.0054308,33.4225232 L24.5000795,18.8542023 L19.4796938,22.8797944 L43.0054308,41.4005273 L66.5510328,22.8633801 L61.5306472,18.837788 L43.0054308,33.4225232 Z"></path></svg></a><a target=_blank title="微信号: airglasswood"><svg height=22 viewBox="0 0 24 24"><path fill=#333 d="M2.224 21.667s4.24-1.825 4.788-2.056C15.029 23.141 22 17.714 22 11.898 22 6.984 17.523 3 12 3S2 6.984 2 11.898c0 1.86.64 3.585 1.737 5.013-.274.833-1.513 4.756-1.513 4.756zm5.943-9.707c.69 0 1.25-.569 1.25-1.271a1.26 1.26 0 0 0-1.25-1.271c-.69 0-1.25.569-1.25 1.27 0 .703.56 1.272 1.25 1.272zm7.583 0c.69 0 1.25-.569 1.25-1.271a1.26 1.26 0 0 0-1.25-1.271c-.69 0-1.25.569-1.25 1.27 0 .703.56 1.272 1.25 1.272z" fill-rule=evenodd></path></svg></a><a href=https://weibo.com/1633765810 target=_blank title=微博云淡风轻的小叔><svg height=22 viewBox="0 0 24 24"><path fill=#333 d="M15.518 3.06c8.834-.854 7.395 7.732 7.394 7.731-.625 1.439-1.673.309-1.673.309.596-7.519-5.692-6.329-5.692-6.329-.898-1.067-.029-1.711-.029-1.711zm4.131 6.985c-.661 1.01-1.377.126-1.376.126.205-3.179-2.396-2.598-2.396-2.598-.719-.765-.091-1.346-.091-1.346 4.882-.551 3.863 3.818 3.863 3.818zM5.317 7.519s4.615-3.86 6.443-1.328c0 0 .662 1.08-.111 2.797.003-.003 3.723-1.96 5.408.159 0 0 .848 1.095-.191 2.649 0 0 2.918-.099 2.918 2.715 0 2.811-4.104 6.44-9.315 6.44-5.214 0-8.026-2.092-8.596-3.102 0 0-3.475-4.495 3.444-10.33zm10.448 7.792s.232-4.411-5.71-4.207c-6.652.231-6.579 4.654-6.579 4.654.021.39.097 3.713 5.842 3.713 5.98 0 6.447-4.16 6.447-4.16zm-9.882.86s-.059-3.632 3.804-3.561c3.412.06 3.206 3.165 3.206 3.165s-.026 2.979-3.684 2.979c-3.288 0-3.326-2.583-3.326-2.583zm2.528 1.037c.672 0 1.212-.447 1.212-.998 0-.551-.543-.998-1.212-.998-.672 0-1.215.447-1.215.998 0 .551.546.998 1.215.998z" fill-rule=evenodd></path></svg></a><a href=https://www.zhihu.com/people/leo-csh target=_blank title=知乎陈帅华><svg height=22 viewBox="0 0 20 20"><g fill=none><path fill=#333 d="M15.234 0C18.125 0 20 1.875 20 4.766v10.468C20 18.125 18.125 20 15.234 20H4.766C1.875 20 0 18.125 0 15.234V4.766C0 1.875 1.875 0 4.766 0h10.468z"></path><path d="M0 0h20v20H0z"></path><path fill=#FFF d="M10.313 10.352c0-.012-.004-1.036-.328-1.055h-2.26a48.42 48.42 0 0 0 .095-3.164h2.21c0-.003.084-.982-.37-.977H5.837c.15-.563.34-1.15.566-1.758 0 0-1.039 0-1.393.937-.146.386-.57 1.87-1.325 3.388.254-.028 1.095-.05 1.59-.963.091-.255.109-.289.222-.627h1.246c0 .452-.051 2.897-.072 3.164H4.414c-.507.019-.672 1.043-.672 1.055h2.832c-.19 2.15-1.209 3.972-3.058 5.413.884.253 1.766-.04 2.202-.43 0 0 .992-.906 1.536-3.004l2.33 2.817s.342-1.166-.053-1.734c-.328-.387-1.212-1.434-1.589-1.814l-.631.504a7.686 7.686 0 0 0 .34-1.752h2.662zM10.898 5v9.441h1.015l.334 1.145 1.82-1.144h2.144V5h-5.313zm4.258 8.398h-1.214l-1.212.782-.22-.782h-.518V6.016h3.164v7.382z"></path></g></svg></a><a href=http://www.shuaihuajun.com/search/ target=_blank title=检索文章><svg height=22 viewBox="0 0 1024 1024"><path fill=#333 d="M883.626667 823.04l-145.066667-144.64A337.92 337.92 0 0 0 810.666667 469.333333a341.333333 341.333333 0 1 0-341.333334 341.333334 337.92 337.92 0 0 0 209.066667-72.106667l144.64 145.066667a42.666667 42.666667 0 0 0 60.586667 0 42.666667 42.666667 0 0 0 0-60.586667zM213.333333 469.333333a256 256 0 1 1 256 256 256 256 0 0 1-256-256z"></path></svg></a></div></div><div class=goma-content><div class=main-content><article class=mb><h1>[译] socket.io官方文档·上篇</h1><div id=article_index style=display:inline-block><div id=article_index_title>目录</div><div id=article_index_content><div>1. <a href=#%E6%A6%82%E8%BF%B0>概述</a></div><div>2. <a href=#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AFAPI>服务器端API</a></div></div></div><main><p>socket.io基于WebSocket协议封装，兼容不支持ws的浏览器采用ajax轮询，socket.io为开发者提供服务端和客户端两套库，无需了解全部ws底层原理，好入门，上手快。学会socket.io后可搭建类似QQ和微信这种即时通信工具的Web版，既可以一对一对话也可开房间组队创建聊天群组，我尝试过传输的媒体类型有文本、图像两种，数据都可由1和0表示，所以理论上可传输任何媒体形式。</p>
+<p>一、概述
+二、服务器端API
+三、客户端API</p>
+<h2><a name=概述>概述</a></h2>
+<p>如何使用:</p>
+<pre class=hljs><code class=language-bash>$ npm install socket.io
+</code></pre>
+<p>使用Node http服务器搭建</p>
+<p>服务器端（app.js）</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>var</span> app = <span class=hljs-built_in>require</span>(<span class=hljs-string>'http'</span>).createServer(handler)
+<span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(app);
+<span class=hljs-keyword>var</span> fs = <span class=hljs-built_in>require</span>(<span class=hljs-string>'fs'</span>);
+
+app.listen(<span class=hljs-number>80</span>);
+
+<span class=hljs-function><span class=hljs-keyword>function</span> <span class=hljs-title>handler</span> (<span class=hljs-params>req, res</span>) </span>{
+  fs.readFile(__dirname + <span class=hljs-string>'/index.html'</span>,
+  <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>err, data</span>) </span>{
+    <span class=hljs-keyword>if</span> (err) {
+      res.writeHead(<span class=hljs-number>500</span>);
+      <span class=hljs-keyword>return</span> res.end(<span class=hljs-string>'Error loading index.html'</span>);
+    }
+
+    res.writeHead(<span class=hljs-number>200</span>);
+    res.end(data);
+  });
+}
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+  socket.emit(<span class=hljs-string>'news'</span>, { <span class=hljs-attr>hello</span>: <span class=hljs-string>'world'</span> });
+  socket.on(<span class=hljs-string>'my other event'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>data</span>) </span>{
+    <span class=hljs-built_in>console</span>.log(data);
+  });
+});
+</code></pre>
+<p>客户端（index.html）</p>
+<pre class=hljs><code class=language-html><span class=hljs-tag>&lt;<span class=hljs-name>script</span> <span class=hljs-attr>src</span>=<span class=hljs-string>"/socket.io/socket.io.js"</span>&gt;</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+<span class=hljs-tag>&lt;<span class=hljs-name>script</span>&gt;</span><span class=javascript>
+  <span class=hljs-keyword>var</span> socket = io(<span class=hljs-string>'http://localhost'</span>);
+  socket.on(<span class=hljs-string>'news'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>data</span>) </span>{
+    <span class=hljs-built_in>console</span>.log(data);
+    socket.emit(<span class=hljs-string>'my other event'</span>, { <span class=hljs-attr>my</span>: <span class=hljs-string>'data'</span> });
+  });
+</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+</code></pre>
+<h4>使用Express3/4</h4>
+<p>服务器端（app.js）</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>var</span> app = <span class=hljs-built_in>require</span>(<span class=hljs-string>'express'</span>)();
+<span class=hljs-keyword>var</span> server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'http'</span>).Server(app);
+<span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(server);
+
+server.listen(<span class=hljs-number>80</span>);
+
+app.get(<span class=hljs-string>'/'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>req, res</span>) </span>{
+  res.sendfile(__dirname + <span class=hljs-string>'/index.html'</span>);
+});
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+  socket.emit(<span class=hljs-string>'news'</span>, { <span class=hljs-attr>hello</span>: <span class=hljs-string>'world'</span> });
+  socket.on(<span class=hljs-string>'my other event'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>data</span>) </span>{
+    <span class=hljs-built_in>console</span>.log(data);
+  });
+});
+</code></pre>
+<p>客户端（index.html）</p>
+<pre class=hljs><code class=language-html><span class=hljs-tag>&lt;<span class=hljs-name>script</span> <span class=hljs-attr>src</span>=<span class=hljs-string>"/socket.io/socket.io.js"</span>&gt;</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+<span class=hljs-tag>&lt;<span class=hljs-name>script</span>&gt;</span><span class=javascript>
+  <span class=hljs-keyword>var</span> socket = io.connect(<span class=hljs-string>'http://localhost'</span>);
+  socket.on(<span class=hljs-string>'news'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>data</span>) </span>{
+    <span class=hljs-built_in>console</span>.log(data);
+    socket.emit(<span class=hljs-string>'my other event'</span>, { <span class=hljs-attr>my</span>: <span class=hljs-string>'data'</span> });
+  });
+</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+</code></pre>
+<h4>使用Express 2.X</h4>
+<p>服务器端（app.js）</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>var</span> app = <span class=hljs-built_in>require</span>(<span class=hljs-string>'express'</span>).createServer();
+<span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(app);
+
+app.listen(<span class=hljs-number>80</span>);
+
+app.get(<span class=hljs-string>'/'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>req, res</span>) </span>{
+  res.sendFile(__dirname + <span class=hljs-string>'/index.html'</span>);
+});
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+  socket.emit(<span class=hljs-string>'news'</span>, { <span class=hljs-attr>hello</span>: <span class=hljs-string>'world'</span> });
+  socket.on(<span class=hljs-string>'my other event'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>data</span>) </span>{
+    <span class=hljs-built_in>console</span>.log(data);
+  });
+});
+</code></pre>
+<p>客户端（index.html）</p>
+<pre class=hljs><code class=language-html><span class=hljs-tag>&lt;<span class=hljs-name>script</span> <span class=hljs-attr>src</span>=<span class=hljs-string>"/socket.io/socket.io.js"</span>&gt;</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+<span class=hljs-tag>&lt;<span class=hljs-name>script</span>&gt;</span><span class=javascript>
+  <span class=hljs-keyword>var</span> socket = io.connect(<span class=hljs-string>'http://localhost'</span>);
+  socket.on(<span class=hljs-string>'news'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>data</span>) </span>{
+    <span class=hljs-built_in>console</span>.log(data);
+    socket.emit(<span class=hljs-string>'my other event'</span>, { <span class=hljs-attr>my</span>: <span class=hljs-string>'data'</span> });
+  });
+</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+</code></pre>
+<h4>发送和接收事件推送</h4>
+<p>Socket.io允许你触发或响应自定义的事件，除了connect，message，disconnect这些事件的名字不能使用之外，你可以触发任何自定义的事件名称。</p>
+<p>服务器端</p>
+<pre class=hljs><code class=language-js><span class=hljs-comment>// 注意，io(&lt;端口号&gt;) 将为你创建一个http服务。</span>
+<span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(<span class=hljs-number>80</span>);
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+  io.emit(<span class=hljs-string>'this'</span>, { <span class=hljs-attr>will</span>: <span class=hljs-string>'be received by everyone'</span>});
+
+  socket.on(<span class=hljs-string>'private message'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params><span class=hljs-keyword>from</span>, msg</span>) </span>{
+    <span class=hljs-built_in>console</span>.log(<span class=hljs-string>'I received a private message by '</span>, <span class=hljs-keyword>from</span>, <span class=hljs-string>' saying '</span>, msg);
+  });
+
+  socket.on(<span class=hljs-string>'disconnect'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params></span>) </span>{
+    io.emit(<span class=hljs-string>'user disconnected'</span>);
+  });
+});
+</code></pre>
+<h4>创建你自己的路由</h4>
+<p>如果你只需要掌控一个应用的全部的消息和触发的事件，那么使用默认的**/**命名空间即可。如果你想要利用第三方代码，或者分享你的代码给别人，socket.io提供了一种命名一个socket的途径。</p>
+<p>使用多路由控制一条单一的连接是有好处的。比如下方的示例代码，客户端发起两个WebSocket连接，而服务器端使用多路由技术仅仅只需要建立一个连接。</p>
+<p>服务器端（app.js）</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(<span class=hljs-number>80</span>);
+<span class=hljs-keyword>var</span> chat = io
+  .of(<span class=hljs-string>'/chat'</span>)
+  .on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+    socket.emit(<span class=hljs-string>'a message'</span>, {
+        <span class=hljs-attr>that</span>: <span class=hljs-string>'only'</span>
+      , <span class=hljs-string>'/chat'</span>: <span class=hljs-string>'will get'</span>
+    });
+    chat.emit(<span class=hljs-string>'a message'</span>, {
+        <span class=hljs-attr>everyone</span>: <span class=hljs-string>'in'</span>
+      , <span class=hljs-string>'/chat'</span>: <span class=hljs-string>'will get'</span>
+    });
+  });
+
+<span class=hljs-keyword>var</span> news = io
+  .of(<span class=hljs-string>'/news'</span>)
+  .on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+    socket.emit(<span class=hljs-string>'item'</span>, { <span class=hljs-attr>news</span>: <span class=hljs-string>'item'</span> });
+  });
+</code></pre>
+<p>客户端（index.html）</p>
+<pre class=hljs><code class=language-html><span class=hljs-tag>&lt;<span class=hljs-name>script</span>&gt;</span><span class=javascript>
+  <span class=hljs-keyword>var</span> chat = io.connect(<span class=hljs-string>'http://localhost/chat'</span>)
+    , news = io.connect(<span class=hljs-string>'http://localhost/news'</span>);
+
+  chat.on(<span class=hljs-string>'connect'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params></span>) </span>{
+    chat.emit(<span class=hljs-string>'hi!'</span>);
+  });
+
+  news.on(<span class=hljs-string>'news'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params></span>) </span>{
+    news.emit(<span class=hljs-string>'woot'</span>);
+  });
+</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+</code></pre>
+<h4>发送不确定能否准确送达到客户端的消息</h4>
+<p>有些时候，一些发送的消息会在传输过程中不慎丢失（由于网络故障或者其他问题导致，或者由于他们是通过长连接轮询的方式存在与请求-响应循环列表中）。</p>
+<p>这种情况下，你可能想要发送这样的一类消息，叫做<strong>易挥发消息</strong>（volatile message）。</p>
+<p>服务器端</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(<span class=hljs-number>80</span>);
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+  <span class=hljs-keyword>var</span> tweets = <span class=hljs-built_in>setInterval</span>(<span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params></span>) </span>{
+    getBieberTweet(<span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>tweet</span>) </span>{
+      socket.volatile.emit(<span class=hljs-string>'bieber tweet'</span>, tweet);
+    });
+  }, <span class=hljs-number>100</span>);
+
+  socket.on(<span class=hljs-string>'disconnect'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params></span>) </span>{
+    <span class=hljs-built_in>clearInterval</span>(tweets);
+  });
+});
+</code></pre>
+<h4>正在发送和正在接受的数据（消息确认机制 acknowledgements）</h4>
+<p>有些时候，客户端会需要<strong>确认</strong>向服务器端发送的事件是否在服务器端正确执行了。</p>
+<p>为了能够实现这一功能，只需简单的通过一个回调函数，放置与**.send()<strong>或者</strong>.emit()<strong>方法的最后一个参数即可，值得一提的是，当你使用</strong>.emit()**，这个确认是有你来完成的，也就是说你可以在这里一直的发送数据。</p>
+<p>服务器端（app.js）</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(<span class=hljs-number>80</span>);
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+  socket.on(<span class=hljs-string>'ferret'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>name, fn</span>) </span>{
+    fn(<span class=hljs-string>'woot'</span>);
+  });
+});
+</code></pre>
+<p>客户端（index.html）</p>
+<pre class=hljs><code class=language-js>&lt;script&gt;
+  <span class=hljs-keyword>var</span> socket = io(); <span class=hljs-comment>// TIP: io() with no args does auto-discovery</span>
+  socket.on(<span class=hljs-string>'connect'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params></span>) </span>{ <span class=hljs-comment>// TIP: you can avoid listening on `connect` and listen on events directly too!</span>
+    socket.emit(<span class=hljs-string>'ferret'</span>, <span class=hljs-string>'tobi'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>data</span>) </span>{
+      <span class=hljs-built_in>console</span>.log(data); <span class=hljs-comment>// data will be 'woot'</span>
+    });
+  });
+&lt;/script&gt;
+</code></pre>
+<h4>广播消息给除当前客户端之外的所有在线客户端</h4>
+<p>为了实现广播消息这一功能，简单的添加一个<strong>broadcast</strong>标志给<strong>emit</strong>和<strong>send</strong>方法的calls，广播意味着发送一个给所有socket（客户端）的消息，不过除了触发这一广播消息的socket（客户端）之外。</p>
+<p>服务器端（app.js）</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>var</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(<span class=hljs-number>80</span>);
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>socket</span>) </span>{
+  socket.broadcast.emit(<span class=hljs-string>'user connected'</span>);
+});
+</code></pre>
+<p>客户端（index.html）</p>
+<pre class=hljs><code class=language-html><span class=hljs-tag>&lt;<span class=hljs-name>script</span>&gt;</span><span class=javascript>
+  <span class=hljs-keyword>var</span> socket = io(<span class=hljs-string>'http://localhost/'</span>);
+  socket.on(<span class=hljs-string>'connect'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params></span>) </span>{
+    socket.send(<span class=hljs-string>'hi'</span>);
+
+    socket.on(<span class=hljs-string>'message'</span>, <span class=hljs-function><span class=hljs-keyword>function</span> (<span class=hljs-params>msg</span>) </span>{
+      <span class=hljs-comment>// my msg</span>
+    });
+  });
+</span><span class=hljs-tag>&lt;/<span class=hljs-name>script</span>&gt;</span>
+</code></pre>
+<p>如果你想要深入学习可以打开这个页面，学习<a target=_blank href=https://github.com/socketio/engine.io>Engine.IO</a>，这（<strong>Engine.IO</strong>）一框架是Socket.IO的基础。</p>
+<h2><a name=服务器端API>服务器端API</a></h2>
+<p>Server</p>
+<p>通过require(‘socket.io’)暴露。</p>
+<h4>new Server(httpServer[, options]);</h4>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> Server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>);
+<span class=hljs-keyword>new</span> Server(httpServer[, options])
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>httpServer (http.Server) 需要绑定的服务。</li>
+<li>options (对象)
+<ul>
+<li>path (字符串)：捕获webSocket连接的路径名，默认为（<strong>/socket.io</strong>）。</li>
+<li>serverClient (布尔型)：是否为本地文件提供服务，默认为（<strong>true</strong>）。</li>
+<li>adapter (Adapter对象)：使用哪一个适配器对象，默认的指向<strong>Adapter</strong>类的一个实例，详情跳转至<a target=_blank href=https://github.com/socketio/socket.io-adapter>socket.io-adapter</a></li>
+<li>origins (字符串)：规定被允许的域，默认为（*） 。</li>
+<li>parser （Parser对象）：指向一个parser对象，默认使用与socket.io相关联的<a target=_blank href=https://github.com/socketio/socket.io-parser>socket.io-parser</a></li>
+</ul>
+</li>
+</ul>
+<p>使用new关键字和不使用new关键字均可实例化一个socket连接。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)();
+<span class=hljs-comment>// or</span>
+<span class=hljs-keyword>const</span> Server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>);
+<span class=hljs-keyword>const</span> io = <span class=hljs-keyword>new</span> Server();
+</code></pre>
+<p>对于engine.io，使用相同的配置项即可，详情查看<a target=_blank href=https://github.com/socketio/engine.io#methods-1>engine.io的配置项参考</a>。</p>
+<p>其他的配置项：</p>
+<ul>
+<li>pingTimeout (数值型)：客户端在没有收到服务器端的响应时，等待多少毫秒数，，默认是60000毫秒（即1分钟）。</li>
+<li>pingInterval (数值型)：服务器端在发送响应包前延迟多少毫秒，默认为25000毫秒（即25秒）。</li>
+</ul>
+<p>这两个参数将会影响的是响应延迟，客户端在知道服务不可用之前仍然需要等待一段时间。举个例子，如果下行TCP连接没有关闭，大概是由于网络故障，但是客户端不得不等待<strong>pingTimeout</strong>+<strong>pingInterval</strong>这个长的毫秒数才能得知<strong>disconnect</strong>（未连接成功）这一事件。</p>
+<ul>
+<li>transports （Array<string>包含一系列字符串元素的数组）：这一选项规定了允许哪些连接方式，默认的（<strong>[‘polling’,‘websocket’]</strong>）。</string></li>
+</ul>
+<p><strong>注意</strong>：这一点很重要，默认的，会使用长轮询的连接方式作为第一手方案，随后如果设备支持的话会升级到使用WebSocket，如果<strong>transports</strong>选项的值设置为**[‘websocket’]**，则意味着直接使用WebSocket方式建立连接，并且如果这一连接方式不能使用，也不会自动切换到备用的链接方案（<strong>polling</strong>），因此目前建议使用默认的设置即可，除非你明白确信使用场景和你想要做什么。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'http'</span>).createServer();
+
+<span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(server, {
+  <span class=hljs-attr>path</span>: <span class=hljs-string>'/test'</span>,
+  <span class=hljs-attr>serveClient</span>: <span class=hljs-literal>false</span>,
+  <span class=hljs-comment>// below are engine.IO options</span>
+  <span class=hljs-attr>pingInterval</span>: <span class=hljs-number>10000</span>,
+  <span class=hljs-attr>pingTimeout</span>: <span class=hljs-number>5000</span>,
+  <span class=hljs-attr>cookie</span>: <span class=hljs-literal>false</span>
+});
+
+server.listen(<span class=hljs-number>3000</span>);
+</code></pre>
+<h4>new Server(port[, options]);</h4>
+<ul>
+<li>port （数值型）：要监听的端口号（如此一来 <strong>httpServer</strong>将会被自动创建）。</li>
+<li>options （对象）：同上方的配置</li>
+</ul>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'http'</span>).createServer();
+<span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(<span class=hljs-number>3000</span>, {
+  <span class=hljs-attr>path</span>: <span class=hljs-string>'/test'</span>,
+  <span class=hljs-attr>serveClient</span>: <span class=hljs-literal>false</span>,
+  <span class=hljs-comment>// below are engine.IO options</span>
+  <span class=hljs-attr>pingInterval</span>: <span class=hljs-number>10000</span>,
+  <span class=hljs-attr>pingTimeout</span>: <span class=hljs-number>5000</span>,
+  <span class=hljs-attr>cookie</span>: <span class=hljs-literal>false</span>
+});
+</code></pre>
+<h4>new Server(options);</h4>
+<ul>
+<li>options （对象）：同上方配置项</li>
+</ul>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)({
+  <span class=hljs-attr>path</span>: <span class=hljs-string>'/test'</span>,
+  <span class=hljs-attr>serveClient</span>: <span class=hljs-literal>false</span>,
+});
+
+<span class=hljs-comment>// either</span>
+<span class=hljs-keyword>const</span> server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'http'</span>).createServer();
+
+io.attach(server, {
+  <span class=hljs-attr>pingInterval</span>: <span class=hljs-number>10000</span>,
+  <span class=hljs-attr>pingTimeout</span>: <span class=hljs-number>5000</span>,
+  <span class=hljs-attr>cookie</span>: <span class=hljs-literal>false</span>
+});
+
+server.listen(<span class=hljs-number>3000</span>);
+
+<span class=hljs-comment>// or</span>
+io.attach(<span class=hljs-number>3000</span>, {
+  <span class=hljs-attr>pingInterval</span>: <span class=hljs-number>10000</span>,
+  <span class=hljs-attr>pingTimeout</span>: <span class=hljs-number>5000</span>,
+  <span class=hljs-attr>cookie</span>: <span class=hljs-literal>false</span>
+});
+</code></pre>
+<h4>server.sockets</h4>
+<ul>
+<li>（命名空间） 默认的命名空间为**/**。</li>
+</ul>
+<h4>server.serverClient([value]);</h4>
+<ul>
+<li>value （布尔型）</li>
+<li>Return Server | Boolean</li>
+</ul>
+<p>如果<strong>value</strong>的值为<strong>true</strong>，则绑定的服务将会对本地文件提供服务。默认的为<strong>true</strong>。这个方法在<strong>attach</strong>函数被调用之后再调用它不会产生任何效果。如果没有提供任何参数，这个方法将会返回当前的值。</p>
+<pre class=hljs><code class=language-js><span class=hljs-comment>// 通过http server的情况可以直接这样写。</span>
+<span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(http, { <span class=hljs-attr>serveClient</span>: <span class=hljs-literal>false</span> });
+
+<span class=hljs-comment>// 或者不通过server的情况，你可以这样调用serverClient方法，记得需要在attach之前调用。</span>
+<span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)();
+io.serveClient(<span class=hljs-literal>false</span>);
+io.attach(http);
+</code></pre>
+<h4>server.path([value]);</h4>
+<ul>
+<li>value （字符串）</li>
+<li>Return Server | String</li>
+</ul>
+<p>设置路径值，指定哪一个<strong>engine.io</strong>和静态文件将被提供服务。默认的路径为**/socket.io**。如果没有提供参数这个方法将会返回当前的路径值。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)();
+io.path(<span class=hljs-string>'/myownpath'</span>);
+
+<span class=hljs-comment>// 客户端</span>
+<span class=hljs-keyword>const</span> socket = io({
+  <span class=hljs-attr>path</span>: <span class=hljs-string>'/myownpath'</span>
+});
+</code></pre>
+<h4>server.adapter([value]);</h4>
+<ul>
+<li>value （Adapter）</li>
+<li>Return Server | Adapter</li>
+</ul>
+<p>设置适配器的值，默认的指向一个Adapter的实例。如果没有提供参数则返回当前的值。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)(<span class=hljs-number>3000</span>);
+<span class=hljs-keyword>const</span> redis = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io-redis'</span>);
+io.adapter(redis({ <span class=hljs-attr>host</span>: <span class=hljs-string>'localhost'</span>, <span class=hljs-attr>port</span>: <span class=hljs-number>6379</span> }));
+</code></pre>
+<h4>server.origins([value]);</h4>
+<ul>
+<li>value （字符串）</li>
+<li>Return Server | String</li>
+</ul>
+<p>设置被允许的域的值，默认的任何域都被允许。如果没有提供参数这个方法将会返回当前的值。</p>
+<pre class=hljs><code class=language-js>io.origins([<span class=hljs-string>'foo.example.com:443'</span>]);
+</code></pre>
+<h5>server.origins(fn);</h5>
+<ul>
+<li>fn (Function)</li>
+<li>Return Server</li>
+</ul>
+<p>提供一个函数，这个函数将携带两个参数，分别是客户端请求的<strong>origin:String</strong>和一个回调函数<strong>callback(err, succcess)</strong>，开发者可以判断origin这个参数是否为希望接收请求的域，<strong>success</strong>是一个布尔值，代表着提供的这个域是否被允许，如果允许该域则填入<strong>true</strong>，如果不允许则填入<strong>false</strong>即可，err参数如无可填入<strong>null</strong>。</p>
+<p>潜在的缺点</p>
+<ul>
+<li>在一些情况下，当无法准确的判断域时，将会自动的使用（*），即全部允许。</li>
+<li>这个函数将会对所有的请求都执行一次，这个函数将尽可能快的执行完毕。</li>
+<li>如果<strong>socket.io</strong>和Express一起使用，CORS头信息将会仅对socket.io的请求有效，因此Express可以使用<a target=_blank href=https://github.com/expressjs/cors>Cors</a></li>
+</ul>
+<pre class=hljs><code class=language-js>io.origins(<span class=hljs-function>(<span class=hljs-params>origin, callback</span>) =&gt;</span> {
+  <span class=hljs-keyword>if</span> (origin !== <span class=hljs-string>'https://foo.example.com'</span>) {
+    <span class=hljs-keyword>return</span> callback(<span class=hljs-string>'origin not allowed'</span>, <span class=hljs-literal>false</span>);
+  }
+  callback(<span class=hljs-literal>null</span>, <span class=hljs-literal>true</span>);
+});
+</code></pre>
+<h4>server.attach(httpServer[, options]);</h4>
+<ul>
+<li>httpServer （httpServer）要依附的http服务</li>
+<li>option （对象）</li>
+</ul>
+<p>依附于这个Server到一个httpServer上的engine.io实例，并携带options配置项（可有可无）。</p>
+<h4>server.listen(httpServer[, options]);</h4>
+<p>和**server.attach(port[, options])**功能相同。</p>
+<h4>server.bind(engine);</h4>
+<ul>
+<li>engine （engine.Server）</li>
+<li>Return Server</li>
+</ul>
+<p>推荐这样使用，绑定这一服务到指定的Engine.io实例上。</p>
+<h4>server.onconnections(socket);</h4>
+<ul>
+<li>socket （engine.Socket）</li>
+<li>Return Server</li>
+</ul>
+<p>推荐使用，创建一个新的<strong>socket.io</strong>客户端。</p>
+<h4>server.of(nsp)</h4>
+<ul>
+<li>nsp （字符串）</li>
+<li>Return 命名空间</li>
+</ul>
+<p>通过路径名称来标志<strong>nsp</strong>（命名空间），初始化并且返回给定的命名空间。如果命名空间已经被初始化了，将立即返回。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> adminNamespace = io.of(<span class=hljs-string>'/admin'</span>);
+</code></pre>
+<h4>server.close([callback]);</h4>
+<ul>
+<li>callback (Function)</li>
+</ul>
+<p>关闭这个socket.io服务。这个回调函数是可选的（可填可不填），这个回调函数将在所有连接被关闭后执行。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> Server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>);
+<span class=hljs-keyword>const</span> PORT   = <span class=hljs-number>3030</span>;
+<span class=hljs-keyword>const</span> server = <span class=hljs-built_in>require</span>(<span class=hljs-string>'http'</span>).Server();
+
+<span class=hljs-keyword>const</span> io = Server(PORT);
+
+io.close(); <span class=hljs-comment>// Close current server</span>
+
+server.listen(PORT); <span class=hljs-comment>// PORT is free to use</span>
+
+io = Server(server);
+</code></pre>
+<h4>Namespace</h4>
+<p>代表一些列的sockets的链接所指向的作用域的标志，这些标志通过路径名来唯一确定（比如**/chat**这一路径名，或者叫做命名空间）。</p>
+<p>一个客户端总是先尝试着连接到**/**（主要的命名空间），然后潜在的连接到其他可用的命名空间（当使用相同的下行连接和多路由机制时）。</p>
+<h4>namespace.name</h4>
+<ul>
+<li>（String）</li>
+</ul>
+<p>命名空间标识符属性。</p>
+<h4>namespace.connected</h4>
+<ul>
+<li>（Object<socket>）</socket></li>
+</ul>
+<p>连接到这一命名空间的<strong>socket</strong>对象的哈希码们，索引为<strong>id</strong>。</p>
+<h4>namespace.adapter</h4>
+<ul>
+<li>（Adapter）</li>
+</ul>
+<p>Adapter被用于命名空间，当使用给予redis的<strong>Adapter</strong>时是很有用的。它将会通过你的集群暴露一些方法来管理sockets和房间。</p>
+<p>注意：注命名空间的适配器可以这样使用，**io.of(‘/’).adapter。</p>
+<h4>namespace.to(room);</h4>
+<ul>
+<li>room （String）</li>
+<li>Return Namespace for chaining</li>
+</ul>
+<p>设置修改器，用来将随后的事件发射到到指定的房间号，这样只有存在于指定房间的socket客户端才可接受到广播消息。</p>
+<p>为了触发多个房间，你可以多次调用<strong>to</strong>方法。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)();
+<span class=hljs-keyword>const</span> adminNamespace = io.of(<span class=hljs-string>'/admin'</span>);
+
+adminNamespace.to(<span class=hljs-string>'level1'</span>).emit(<span class=hljs-string>'an event'</span>, { <span class=hljs-attr>some</span>: <span class=hljs-string>'data'</span> });
+</code></pre>
+<h4>namespace.in(room)</h4>
+<p>用法同<strong>namespace.to(room)</strong></p>
+<h4>namespace.emit(eventName[, …args])</h4>
+<ul>
+<li>eventName （String）</li>
+<li>args</li>
+</ul>
+<p>触发一个事件给所有的连接中的客户端。下方代码的两种示例作用是等价的。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)();
+io.emit(<span class=hljs-string>'an event sent to all connected clients'</span>); <span class=hljs-comment>// main namespace</span>
+
+<span class=hljs-keyword>const</span> chat = io.of(<span class=hljs-string>'/chat'</span>);
+chat.emit(<span class=hljs-string>'an event sent to all connected clients in chat namespace'</span>);
+</code></pre>
+<p>注意：从命名空间触发的事件不支持消息送达确认。</p>
+<h4>namespace.client(callback)</h4>
+<ul>
+<li>callback （Function）</li>
+</ul>
+<p>获取一系列连接到当前命名空间（路由）的客户端ID（会穿越所有节点）。</p>
+<pre class=hljs><code class=language-js><span class=hljs-keyword>const</span> io = <span class=hljs-built_in>require</span>(<span class=hljs-string>'socket.io'</span>)();
+io.of(<span class=hljs-string>'/chat'</span>).clients(<span class=hljs-function>(<span class=hljs-params>error, clients</span>) =&gt;</span> {
+  <span class=hljs-keyword>if</span> (error) <span class=hljs-keyword>throw</span> error;
+  <span class=hljs-built_in>console</span>.log(clients); <span class=hljs-comment>// =&gt; [PZDoMHjiu8PYfRiKAAAF, Anw2LatarvGVVXEIAAAD]</span>
+});
+</code></pre>
+<p>示例，获得所有在指定命名空间的房间里的客户端们。</p>
+<pre class=hljs><code class=language-js>io.of(<span class=hljs-string>'/chat'</span>).in(<span class=hljs-string>'general'</span>).clients(<span class=hljs-function>(<span class=hljs-params>error, clients</span>) =&gt;</span> {
+  <span class=hljs-keyword>if</span> (error) <span class=hljs-keyword>throw</span> error;
+  <span class=hljs-built_in>console</span>.log(clients); <span class=hljs-comment>// =&gt; [Anw2LatarvGVVXEIAAAD]</span>
+});
+</code></pre>
+<p>和广播一样，默认的，将获取所有从默认的**/**命名空间过来的客户端们。</p>
+<pre class=hljs><code class=language-js>io.clients(<span class=hljs-function>(<span class=hljs-params>error, clients</span>) =&gt;</span> {
+  <span class=hljs-keyword>if</span> (error) <span class=hljs-keyword>throw</span> error;
+  <span class=hljs-built_in>console</span>.log(clients); <span class=hljs-comment>// =&gt; [6em3d4TJP8Et9EMNAAAA, G5p55dHhGgUnLUctAAAB]</span>
+});
+</code></pre>
+<h4>namespace.use(fn)</h4>
+<ul>
+<li>fn (Function)</li>
+</ul>
+<p>注册一个中间件，这个函数将对所有流经的socket执行操作，并且还会已接受传参的方式获得流经的socket，并且流经到当前中间件之后，可以可选择的确定是否流经到下一个中间件。</p>
+<p>当错误信息经过中间件，回调函数将会发送一个特殊的错误信息给客户端。</p>
+<pre class=hljs><code class=language-js>io.use(<span class=hljs-function>(<span class=hljs-params>socket, next</span>) =&gt;</span> {
+  <span class=hljs-keyword>if</span> (socket.request.headers.cookie) <span class=hljs-keyword>return</span> next();
+  next(<span class=hljs-keyword>new</span> <span class=hljs-built_in>Error</span>(<span class=hljs-string>'Authentication error'</span>));
+});
+</code></pre>
+<h4>Event: ‘connect’</h4>
+<ul>
+<li>socket （socket） 客户端的socket连接实例</li>
+</ul>
+<p>当有一个来自客户端的连接时触发该事件。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connect'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  <span class=hljs-comment>// ...</span>
+});
+
+io.of(<span class=hljs-string>'/admin'</span>).on(<span class=hljs-string>'connect'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  <span class=hljs-comment>// ...</span>
+});
+</code></pre>
+<h4>Event: ‘connection’</h4>
+<p>用法同<strong>Event: ‘connect’</strong>。</p>
+<h4>Flag: ‘Volatile’</h4>
+<p>设置修改器，将随后的事件触发导向这样一种情况：即如果当客户端没有做好接受信息的准备时（可能由于网络故障或者其他问题导致的，或者连接方式采用长轮询的方式，而恰好响应接受消息的事件此时还在请求-响应循环列表中未被触发），那么允许服务器发送的数据丢失。</p>
+<pre class=hljs><code class=language-js>io.volatile.emit(<span class=hljs-string>'an event'</span>, { <span class=hljs-attr>some</span>: <span class=hljs-string>'data'</span> }); <span class=hljs-comment>// the clients may or may not receive it</span>
+</code></pre>
+<h4>Flag: ‘local’</h4>
+<p>设置修改器，将随后的事件导向这样一种情况：即事件数据仅广播给当前节点（当使用了<a target=_blank href=https://github.com/socketio/socket.io-redis>Redis adapter</a>）。</p>
+<pre class=hljs><code class=language-js>io.local.emit(<span class=hljs-string>'an event'</span>, { <span class=hljs-attr>some</span>: <span class=hljs-string>'data'</span> });
+</code></pre>
+<h4>Socket</h4>
+<p>socket是与客户端浏览器交互的基石。socket属于一个确定的命名空间（默认为**/**），并且使用下行客户端沟通讯息。</p>
+<p>值得注意的是，这里所指的socket和下行TCP/IP的socket不是一回事儿，这里所指的socket只是一个类名而已。</p>
+<p>在每一个命名空间内，你可以定义任意的频道（被叫做房间room的东西），如此socket就可以加入房间或者离开房间。房间的机制使得服务器端可以同时给一组socket广播消息。</p>
+<p>socket类集成了<strong>EventEmitter</strong>，socket类重写了<strong>emit</strong>方法，并且不会修改其他的<strong>EventEmitter</strong>方法、这里所有的以<strong>EventMitter</strong>的形式出现的方法们均是通过<strong>EventEmitter</strong>实现。</p>
+<h4>socket.id</h4>
+<ul>
+<li>（返回字符串）</li>
+</ul>
+<p>一个独一无二的针对当前会话socket的标志，来自下行客户端。</p>
+<h4>socket.rooms</h4>
+<ul>
+<li>（返回对象）</li>
+</ul>
+<p>遗传哈希字符串，用来标志当前客户端所在的房间号，通过房间名称建立索引。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.join(<span class=hljs-string>'room 237'</span>, <span class=hljs-function>() =&gt;</span> {
+    <span class=hljs-keyword>let</span> rooms = Objects.keys(socket.rooms);
+    <span class=hljs-built_in>console</span>.log(rooms); <span class=hljs-comment>// [ &lt;socket.id&gt;, 'room 237' ]</span>
+  });
+});
+</code></pre>
+<h4>socket.client</h4>
+<ul>
+<li>（Client）</li>
+</ul>
+<p>下行客户端对象的引用。</p>
+<h4>socket.conn</h4>
+<ul>
+<li>（engine.Socket）</li>
+</ul>
+<p>下行客户端传输连接的引用（engine.io socket 对象），这个允许进入到IO的传输层，不过仍然是实际的TCP/IP socket的一种抽象表示。</p>
+<h4>socket.handshake</h4>
+<ul>
+<li>（对象）</li>
+</ul>
+<p>握手（handshake）细节：</p>
+<pre class=hljs><code class=language-js>{
+  <span class=hljs-attr>headers</span>: <span class=hljs-comment>/* the headers sent as part of the handshake */</span>,
+  time: <span class=hljs-comment>/* the date of creation (as string) */</span>,
+  address: <span class=hljs-comment>/* the ip of the client */</span>,
+  xdomain: <span class=hljs-comment>/* whether the connection is cross-domain */</span>,
+  secure: <span class=hljs-comment>/* whether the connection is secure */</span>,
+  issued: <span class=hljs-comment>/* the date of creation (as unix timestamp) */</span>,
+  url: <span class=hljs-comment>/* the request URL string */</span>,
+  query: <span class=hljs-comment>/* the query object */</span>
+}
+</code></pre>
+<p>用例</p>
+<pre class=hljs><code class=language-js>io.use(<span class=hljs-function>(<span class=hljs-params>socket, next</span>) =&gt;</span> {
+  <span class=hljs-keyword>let</span> handshake = socket.handshake;
+  <span class=hljs-comment>// ...</span>
+});
+
+io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  <span class=hljs-keyword>let</span> handshake = socket.handshake;
+  <span class=hljs-comment>// ...</span>
+});
+</code></pre>
+<h4>socket.use(fn)</h4>
+<ul>
+<li>fn （Function）</li>
+</ul>
+<p>注册中间件，当任何讯息流经该中间件时执行中间件中的内容，该中间件会接受参数，也可以判断是否阻断后续中间件的执行。</p>
+<p>当发生错误，错误将会通过中间件的回调函数，直接发送一个特殊的错误数据包到客户端。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.use(<span class=hljs-function>(<span class=hljs-params>packet, next</span>) =&gt;</span> {
+    <span class=hljs-keyword>if</span> (packet.doge === <span class=hljs-literal>true</span>) <span class=hljs-keyword>return</span> next();
+    next(<span class=hljs-keyword>new</span> <span class=hljs-built_in>Error</span>(<span class=hljs-string>'Not a doge error'</span>));
+  });
+});
+</code></pre>
+<h4>socket.send([…args][, ack])</h4>
+<ul>
+<li>args</li>
+<li>ack （Function）</li>
+<li>Return Socket</li>
+</ul>
+<p>发送一个<strong>message</strong>事件，</p>
+<h5>socket.emit(eventName[, …args][, ack])</h5>
+<p>（重写 EventEmitter.emit方法）</p>
+<ul>
+<li>eventName （字符串）</li>
+<li>args</li>
+<li>ack （Function）</li>
+<li>Return Socket</li>
+</ul>
+<p>通过事件名来触发事件给指定的socket，任意多的参数都可被传入，支持所有可序列化的数据结构。包括<strong>Buffer</strong>。</p>
+<pre class=hljs><code class=language-js>socket.emit(<span class=hljs-string>'hello'</span>, <span class=hljs-string>'world'</span>);
+socket.emit(<span class=hljs-string>'with-binary'</span>, <span class=hljs-number>1</span>, <span class=hljs-string>'2'</span>, { <span class=hljs-number>3</span>: <span class=hljs-string>'4'</span>, <span class=hljs-number>5</span>: <span class=hljs-keyword>new</span> Buffer(<span class=hljs-number>6</span>) });
+</code></pre>
+<p>其中<strong>ack</strong>参数是可选的（用意确认客户端是否接受到讯息，或者对信息做处理并返回给服务器端），并且将被客户应答。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.emit(<span class=hljs-string>'an event'</span>, { <span class=hljs-attr>some</span>: <span class=hljs-string>'data'</span> });
+
+  socket.emit(<span class=hljs-string>'ferret'</span>, <span class=hljs-string>'tobi'</span>, <span class=hljs-function>(<span class=hljs-params>data</span>) =&gt;</span> {
+    <span class=hljs-built_in>console</span>.log(data); <span class=hljs-comment>// data will be 'woot'</span>
+  });
+
+  <span class=hljs-comment>// the client code</span>
+  <span class=hljs-comment>// client.on('ferret', (name, fn) =&gt; {</span>
+  <span class=hljs-comment>//   fn('woot');</span>
+  <span class=hljs-comment>// });</span>
+
+});
+</code></pre>
+<h4>socket.on(eventName, callback)</h4>
+<p>（继承子<strong>EventEmitter</strong>）</p>
+<ul>
+<li>eventName （字符串）</li>
+<li>callback （Function）</li>
+<li>Return Socket</li>
+</ul>
+<p>为给定的事件注册一个新的事件处理器。</p>
+<pre class=hljs><code class=language-js>socket.on(<span class=hljs-string>'news'</span>, <span class=hljs-function>(<span class=hljs-params>data</span>) =&gt;</span> {
+  <span class=hljs-built_in>console</span>.log(data);
+});
+<span class=hljs-comment>// with several arguments</span>
+socket.on(<span class=hljs-string>'news'</span>, <span class=hljs-function>(<span class=hljs-params>arg1, arg2, arg3</span>) =&gt;</span> {
+  <span class=hljs-comment>// ...</span>
+});
+<span class=hljs-comment>// or with acknowledgement</span>
+socket.on(<span class=hljs-string>'news'</span>, <span class=hljs-function>(<span class=hljs-params>data, callback</span>) =&gt;</span> {
+  callback(<span class=hljs-number>0</span>);
+});
+</code></pre>
+<h4>socket.once(eventName, listener)</h4>
+<h4>socket.removeListener(eventName, listener)</h4>
+<h4>socket.removeAllListener([eventName])</h4>
+<h4>socket.eventNames()</h4>
+<p>继承自<strong>EventEmitter</strong>（还有其他在这里未提及的方法），查看Node.js的官方文档对<strong>events</strong>模块的说明。</p>
+<h4>socket.join(room[, callback])</h4>
+<ul>
+<li>room （字符串）</li>
+<li>callback （Function）</li>
+<li>Return Socket for chaining</li>
+</ul>
+<p>添加客户端到<strong>room</strong>房间内，并且执行可选择的回调函数。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.join(<span class=hljs-string>'room 237'</span>, <span class=hljs-function>() =&gt;</span> {
+    <span class=hljs-keyword>let</span> rooms = Objects.keys(socket.rooms);
+    <span class=hljs-built_in>console</span>.log(rooms); <span class=hljs-comment>// [ &lt;socket.id&gt;, 'room 237' ]</span>
+    io.to(<span class=hljs-string>'room 237'</span>, <span class=hljs-string>'a new user has joined the room'</span>); <span class=hljs-comment>// broadcast to everyone in the room</span>
+  });
+});
+</code></pre>
+<p>加入房间的过程被<strong>Adapter</strong>适配器处理。</p>
+<p>为了更方便开发者，每一个socket自动的通过他自己的id标志创建了一个只属于他自己的房间，这样做，使得当前socket和其他socket之间的广播变得更容易。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.on(<span class=hljs-string>'say to someone'</span>, <span class=hljs-function>(<span class=hljs-params>id, msg</span>) =&gt;</span> {
+    <span class=hljs-comment>// send a private message to the socket with the given id</span>
+    socket.to(id).emit(<span class=hljs-string>'my message'</span>, msg);
+  });
+});
+</code></pre>
+<h4>socket.leave(room[, callback])</h4>
+<ul>
+<li>room （字符串）</li>
+<li>callback （Function）</li>
+<li>Return Socket for chaining</li>
+</ul>
+<p>从指定的房间里移除客户端，并且可选择的执行一个异常回调函数。</p>
+<p><strong>与当客户端的连接丢失后，会自动的将其从房间移除</strong></p>
+<h4>socket.to(room)</h4>
+<ul>
+<li>room （字符串）</li>
+<li>Return Socket for chaining</li>
+</ul>
+<p>设置修改器，使得随后的事件导向这样的一种情况：即仅向当前房间的客户端广播消息（主动广播消息的一方除外）。</p>
+<p>为了能对多个房间触发同一个广播，你需要给多个房间链式的执行几次<strong>to</strong>方法。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  <span class=hljs-comment>// to one room</span>
+  socket.to(<span class=hljs-string>'others'</span>).emit(<span class=hljs-string>'an event'</span>, { <span class=hljs-attr>some</span>: <span class=hljs-string>'data'</span> });
+  <span class=hljs-comment>// to multiple rooms</span>
+  socket.to(<span class=hljs-string>'room1'</span>).to(<span class=hljs-string>'room2'</span>).emit(<span class=hljs-string>'hello'</span>);
+  <span class=hljs-comment>// a private message to another socket</span>
+  socket.to(<span class=hljs-comment>/* another socket id */</span>).emit(<span class=hljs-string>'hey'</span>);
+});
+</code></pre>
+<p><strong>注意</strong>：广播消息下执行<strong>emit</strong>方法，是无法传入确认消息是否接收的回调函数的，原因你懂的。</p>
+<h4>socket.in(room)</h4>
+<p>用法同 socket.to(room)</p>
+<h4>socket.compress(value)</h4>
+<ul>
+<li>value （布尔型）是否对数据包进行压缩</li>
+<li>Return Socket for chaining</li>
+</ul>
+<p>设置修改器，将随后的事件导向这样一种情况，仅对设置为<strong>true</strong>的数据进行压缩，如果不调用该方法，默认为<strong>true</strong>。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.compress(<span class=hljs-literal>false</span>).emit(<span class=hljs-string>'uncompressed'</span>, <span class=hljs-string>"that's rough"</span>);
+});
+</code></pre>
+<h4>socket.disconnect(close)</h4>
+<ul>
+<li>close （布尔型）是否关闭下行连接</li>
+<li>Return Socket</li>
+</ul>
+<p>关闭对客户端的链接，如果close的值为<strong>true</strong>，则关闭下行连接，否则，仅仅关闭命名空间。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.compress(<span class=hljs-literal>false</span>).emit(<span class=hljs-string>'uncompressed'</span>, <span class=hljs-string>"that's rough"</span>);
+});
+</code></pre>
+<h4>Flag: ‘broadcast’</h4>
+<p>设置修改器，是的随后的事件导向这样一种情况，即除了主动广播消息的客户端以外，将随后的事件消息广播给所有的socket。</p>
+<pre class=hljs><code>io.on('connection', (socket) =&gt; {
+  socket.broadcast.emit('an event', { some: 'data' }); // everyone gets it but the sender
+});
+</code></pre>
+<h4>Flag: ‘volatile’</h4>
+<p>设置修改器，使得随后的事件导向这样一种情况，允许客户端在没有做好接受数据的准备时丢失消息数据，详细翻译去上边找哈~。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.volatile.emit(<span class=hljs-string>'an event'</span>, { <span class=hljs-attr>some</span>: <span class=hljs-string>'data'</span> }); <span class=hljs-comment>// the client may or may not receive it</span>
+});
+</code></pre>
+<h5>Event: ‘disconnect’</h5>
+<ul>
+<li>reason （字符串）丢失连接的原因（客户端与服务器端相同）</li>
+</ul>
+<p>丢失连接时。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.on(<span class=hljs-string>'disconnect'</span>, <span class=hljs-function>(<span class=hljs-params>reason</span>) =&gt;</span> {
+    <span class=hljs-comment>// ...</span>
+  });
+});
+</code></pre>
+<h4>Event: ‘disconnecting’</h4>
+<ul>
+<li>reason （字符串） 丢失连接的原因（客户端与服务器端相同）</li>
+</ul>
+<p>当客户端丢失连接后执行（此时还为离开房间<strong>rooms</strong>）。</p>
+<pre class=hljs><code class=language-js>io.on(<span class=hljs-string>'connection'</span>, <span class=hljs-function>(<span class=hljs-params>socket</span>) =&gt;</span> {
+  socket.on(<span class=hljs-string>'disconnecting'</span>, <span class=hljs-function>(<span class=hljs-params>reason</span>) =&gt;</span> {
+    <span class=hljs-keyword>let</span> rooms = <span class=hljs-built_in>Object</span>.keys(socket.rooms);
+    <span class=hljs-comment>// ...</span>
+  });
+});
+</code></pre>
+<p>这里有一些保留事件（<strong>connect</strong>，<strong>newListener</strong>和<strong>removeListener</strong>），这些名臣不能用与事件自定义名称。</p>
+<h4>Client</h4>
+<p><strong>client</strong>类代表从客户端过来的传输连接。一个客户端和属于不同命名空间的多路复用的socket有关联，即client客户端仅一个，而client可以通过访问不同的命名空间创建多个socket连接。</p>
+<h4>client.conn</h4>
+<ul>
+<li>(engine.Socket)</li>
+</ul>
+<p>下行engine.io连接的引用。</p>
+<h4>client.request</h4>
+<ul>
+<li>（请求）</li>
+</ul>
+<p>可以看作为一个代理，返回请求的引用。了解请求头信息，如Cookie或者User-Agent的知识是有帮助的。</p>
+<hr>
+<p>继续阅读：<a href=http://www.shuaihuajun.com/article/socket-io-official-document-part-second/index.html?_blank>[译] socket.io官方文档·下篇</a></p>
+</main><div id=article_copyright><div>文章于2017年9月发布。</div><div><span>本文章采用</span><a rel=license target=_blank href=http://creativecommons.org/licenses/by-sa/3.0/deed.zh>知识共享署名-相同方式共享 3.0 未本地化版本许可协议</a><span>进行许可。</span></div><div><span>转载必须注明转自帅华君（陈帅华）个人网站及完整链接。</span></div></div><div id=back_to_top style=opacity:0><svg width=44 viewBox="0 0 1024 1024" version=1.1 xmlns=http://www.w3.org/2000/svg>
+<path d="M513 103.7c-226.1 0-409.4 183.3-409.4 409.4S286.9 922.6 513 922.6s409.4-183.3 409.4-409.4S739.1 103.7 513 103.7z m153.5 364.7c-5.2 5.3-12.1 7.9-19 7.9s-13.8-2.6-19-7.9L545.1 385c0 0.4 0.1 0.7 0.1 1.1V705c0 11.1-5.7 20.9-14.4 26.6-4.7 4.2-10.9 6.7-17.7 6.7-6.8 0-13-2.5-17.7-6.7-8.7-5.7-14.4-15.5-14.4-26.6V386.1c0-0.4 0-0.7 0.1-1.1l-83.4 83.4c-10.5 10.5-27.5 10.5-38 0s-10.5-27.5 0-38L494 295.9c10.5-10.5 27.5-10.5 38 0l134.5 134.5c10.5 10.4 10.5 27.5 0 38z" fill=#3259CE></path>
+</svg></div></article></div><div class=month-idea><img src=data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAA8AAD/4QMsaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA2LjAtYzAwNiA3OS4xNjQ3NTMsIDIwMjEvMDIvMTUtMTE6NTI6MTMgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMDIxIE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpGNkQ0RjE3RDg5N0QxMUVCQTU2NENFMDM5MDFBODM3RiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpGNkQ0RjE3RTg5N0QxMUVCQTU2NENFMDM5MDFBODM3RiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkY2RDRGMTdCODk3RDExRUJBNTY0Q0UwMzkwMUE4MzdGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkY2RDRGMTdDODk3RDExRUJBNTY0Q0UwMzkwMUE4MzdGIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+/+4ADkFkb2JlAGTAAAAAAf/bAIQABgQEBAUEBgUFBgkGBQYJCwgG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 alt=一个教程微信订阅号><h2>文章归档</h2><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2021/3/ title=2021年三月(2)>2021年三月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2021/2/ title=2021年二月(1)>2021年二月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2021/1/ title=2021年一月(1)>2021年一月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/11/ title=2020年十一月(2)>2020年十一月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/9/ title=2020年九月(1)>2020年九月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/8/ title=2020年八月(6)>2020年八月(6)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/7/ title=2020年七月(3)>2020年七月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/6/ title=2020年六月(5)>2020年六月(5)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/5/ title=2020年五月(3)>2020年五月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/4/ title=2020年四月(2)>2020年四月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/3/ title=2020年三月(4)>2020年三月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/2/ title=2020年二月(4)>2020年二月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2020/1/ title=2020年一月(5)>2020年一月(5)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/12/ title=2019年十二月(4)>2019年十二月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/11/ title=2019年十一月(5)>2019年十一月(5)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/10/ title=2019年十月(5)>2019年十月(5)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/9/ title=2019年九月(7)>2019年九月(7)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/8/ title=2019年八月(3)>2019年八月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/7/ title=2019年七月(4)>2019年七月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/6/ title=2019年六月(4)>2019年六月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/5/ title=2019年五月(4)>2019年五月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/4/ title=2019年四月(4)>2019年四月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/3/ title=2019年三月(2)>2019年三月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/2/ title=2019年二月(2)>2019年二月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2019/1/ title=2019年一月(5)>2019年一月(5)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/12/ title=2018年十二月(5)>2018年十二月(5)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/11/ title=2018年十一月(4)>2018年十一月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/10/ title=2018年十月(2)>2018年十月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/9/ title=2018年九月(2)>2018年九月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/8/ title=2018年八月(2)>2018年八月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/7/ title=2018年七月(3)>2018年七月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/6/ title=2018年六月(4)>2018年六月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/5/ title=2018年五月(2)>2018年五月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/4/ title=2018年四月(4)>2018年四月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/3/ title=2018年三月(3)>2018年三月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/2/ title=2018年二月(3)>2018年二月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2018/1/ title=2018年一月(6)>2018年一月(6)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/12/ title=2017年十二月(4)>2017年十二月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/11/ title=2017年十一月(5)>2017年十一月(5)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/10/ title=2017年十月(4)>2017年十月(4)</a><a class="month-idea-item selected" href=http://www.shuaihuajun.com/idea/2017/9/ title=2017年九月(6)>2017年九月(6)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/8/ title=2017年八月(3)>2017年八月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/7/ title=2017年七月(3)>2017年七月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/6/ title=2017年六月(4)>2017年六月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/5/ title=2017年五月(3)>2017年五月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/4/ title=2017年四月(2)>2017年四月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/3/ title=2017年三月(4)>2017年三月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/2/ title=2017年二月(3)>2017年二月(3)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2017/1/ title=2017年一月(2)>2017年一月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/12/ title=2016年十二月(2)>2016年十二月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/11/ title=2016年十一月(2)>2016年十一月(2)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/10/ title=2016年十月(4)>2016年十月(4)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/9/ title=2016年九月(1)>2016年九月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/8/ title=2016年八月(1)>2016年八月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/7/ title=2016年七月(1)>2016年七月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/6/ title=2016年六月(1)>2016年六月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/5/ title=2016年五月(1)>2016年五月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/2/ title=2016年二月(1)>2016年二月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2016/1/ title=2016年一月(1)>2016年一月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2015/9/ title=2015年九月(1)>2015年九月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2015/8/ title=2015年八月(1)>2015年八月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2015/7/ title=2015年七月(1)>2015年七月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2015/6/ title=2015年六月(1)>2015年六月(1)</a><a class=month-idea-item href=http://www.shuaihuajun.com/idea/2015/5/ title=2015年五月(2)>2015年五月(2)</a></div></div><footer><div><p>copyright©2021 <a href=http://www.shuaihuajun.com/>帅华君</a><p><a target=_blank href=http://www.beian.miit.gov.cn/>冀ICP备15021127号-3</a></p></div></footer></div>

@@ -1254,6 +1254,7 @@ const webpackConfig = smp.wrap({
 
 ```json
 //npm install --save-dev webpack-bundle-analyzer
+//分析第三方模块文件大小和业务组件代码大小
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
@@ -1261,7 +1262,7 @@ module.exports = {
     new BundleAnalyzerPlugin()
   ]
 }
-//构架完成以后8888端口查看
+//构建完成以后8888端口查看
 ```
 
 **使用高版本的 webpack 和 Node.js  提高构建速度**
