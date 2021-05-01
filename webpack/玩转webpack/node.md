@@ -1265,20 +1265,18 @@ module.exports = {
 //构建完成以后8888端口查看
 ```
 
-**使用高版本的 webpack 和 Node.js  提高构建速度**
+## **使用高版本的 webpack 和 Node.js  提高构建速度**
 
-1. V8 带来的优化（for of 替代 forEach、 Map 和 Set 替代 Object、 includes 替代 indexOf）  
-2. 默认使用更快的 md4 hash 算法  
-3. webpacks AST 可以直接从 loader 传递给 AST， 减少解析时间  
-4. 使用字符串方法替代正则表达式  
+1. **V8** 带来的优化（**for of 替代 forEach、 Map 和 Set 替代 Object、 includes 替代 indexOf**）  
+2. 默认使用更快的 **md4 hash 算法**  
+3. webpacks AST 可以**直接从 loader 传递给 AST**， 减少解析时间  
+4. 使用**字符串方法替代正则表达式**  
 
 ## 多进程/多实例构建：
 
  资源并行解析可选方案  
 
-1. (we'b'pack3 )使用 HappyPack 解析资源:每次 webapck 解析一个模块， HappyPack 会将它及它的依赖分配给 worker 线程中  
-
-   
+1. (webpack3)使用 HappyPack 解析资源:每次 webapck **解析一个模块**， HappyPack 会将它及它的依赖分配给 **worker 线程中**  
 
 2. 使用 thread-loader (webpack4):每次 webpack 解析一个模块， threadloader 会将它及它的依赖分配给 worker 线程中  
 
@@ -1289,11 +1287,46 @@ module.exports = {
            test: /\.js$/,
            include: path.resolve('src'),
            use: [
-             'thread-loader',
-             // your expensive loader (e.g babel-loader) 放在最前(最后处理任务)
+             {
+                 loader:'thread-loader',
+                 options:{
+                     workers:3
+                 }
+             },
+             // your expensive loader (e.g babel-loader) 放在解析的最前(作为最后处理任务)
+               'babel-loader'
            ],
          },
        ],
+   ```
+
+   webpack4当中使用happypack5版本
+
+   ```json
+   //npm install --save-dev happypack@5.0.1
+   // @file: webpack.config.js
+   const HappyPack = require('happypack');
+   exports.module = {
+     rules: [
+       {
+         test: /.js$/,
+         // 1) replace your original list of loaders with "happypack/loader":
+         // loaders: [ 'babel-loader?presets[]=es2015' ],
+         use: 'happypack/loader',
+         include: [ /* ... */ ],
+         exclude: [ /* ... */ ]
+       }
+     ]
+   };
+   
+   exports.plugins = [
+     // 2) create the plugin:
+     new HappyPack({
+       // 3) re-add the loaders you replaced above in #1:
+         //这里替换
+       loaders: [ 'babel-loader?presets[]=es2015' ]
+     })
+   ];
    ```
 
    
