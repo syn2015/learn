@@ -1336,19 +1336,67 @@ module.exports = {
    - 方法一： 使用 parallel-uglify-plugin 插件  
 
      ```json
+     // 引入 ParallelUglifyPlugin 插件
+     const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
+  
+     module.exports = {
+    plugins: [
+         // 使用 ParallelUglifyPlugin 并行压缩输出JS代码
+         new ParallelUglifyPlugin({
+           // 传递给 UglifyJS的参数如下：
+        uglifyJS: {
+             output: {
+            /*
+                是否输出可读性较强的代码，即会保留空格和制表符，默认为输出，为了达到更好的压缩效果，
+             可以设置为false
+               */
+               beautify: false,
+               /*
+                是否保留代码中的注释，默认为保留，为了达到更好的压缩效果，可以设置为false
+               */
+               comments: false
+             },
+             compress: {
+               /*
+                是否在UglifyJS删除没有用到的代码时输出警告信息，默认为输出，可以设置为false关闭这些作用
+                不大的警告
+            */
+               warnings: false,
+  
+               /*
+                是否删除代码中所有的console语句，默认为不删除，开启后，会删除所有的console语句
+               */
+               drop_console: true,
      
+               /*
+                是否内嵌虽然已经定义了，但是只用到一次的变量，比如将 var x = 1; y = x, 转换成 y = 5, 默认为不
+                转换，为了达到更好的压缩效果，可以设置为false
+               */
+               collapse_vars: true,
+     
+               /*
+                是否提取出现了多次但是没有定义成变量去引用的静态值，比如将 x = 'xxx'; y = 'xxx'  转换成
+                var a = 'xxxx'; x = a; y = a; 默认为不转换，为了达到更好的压缩效果，可以设置为false
+               */
+               reduce_vars: true
+             }
+           }
+         }),
+       ]
+     }
      ```
-
-   - (不支持ES6)uglifyjs-webpack-plugin 开启 parallel 参数  
-
+   
+   - (不支持ES6)[uglifyjs-webpack-plugin](https://webpack.docschina.org/plugins/uglifyjs-webpack-plugin/) 开启 parallel 参数  
+   
      ```json
+     $ npm install uglifyjs-webpack-plugin --save-dev
      
      ```
-
+   
      
-
+   
    - terser-webpack-plugin 开启 parallel 参数  
-
+   
      ```json
      const TerserPlugin = require('terser-webpack-plugin');
       // optimization: {
@@ -1360,9 +1408,9 @@ module.exports = {
          //     ]
          // },
      ```
-
+   
      
-
+   
    
 
 ## 分包： 
@@ -1381,6 +1429,7 @@ module.exports = {
    
    module.exports = {
        entry: {
+           //加入多个library，进行业务和基础库的分包
            library: [
                'react',
                'react-dom'
@@ -1389,23 +1438,23 @@ module.exports = {
        output: {
            filename: '[name]_[chunkhash].dll.js',
            path: path.join(__dirname, 'build/library'),
-           library: '[name]'
+           library: '[name]' //对应包的名称
        },
        plugins: [
            new webpack.DllPlugin({
                name: '[name]_[hash]',
-               path: path.join(__dirname, 'build/library/[name].json')// manifest.json的位置
+               path: path.join(__dirname, 'build/library/[name].json')// manifest.json的位置,避开dist目录，避免被webpack插件清理目录
            })
        ]
    };
    //package.json
    "dll":"webpack --config webpack.dll.js"
-   ```
-
-   - 使用 DllReferencePlugin 引用 manifest.json  
-
+```
+   
+- 使用 DllReferencePlugin 引用 manifest.json  
+   
    ```json
-   //在webpack.config.js引入
+   //在webpack.config.js引入,分包以后在生产配置文件中引入分包
    module.exports={
        plugins:[
             new webpack.DllReferencePlugin({
@@ -1413,7 +1462,12 @@ module.exports = {
             }),
        ]
    }
+   
    ```
+   
+   
+   
+   
 
 ## 缓存  
 
