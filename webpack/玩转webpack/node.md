@@ -1499,7 +1499,7 @@ module.exports = {
 
    
 
-3. 使用 cache-loader 或者 hard-source-webpack-plugin  (**提升模块转换阶段**)
+3. 使用 **cache-loader** 或者 **hard-source-webpack-plugin**  (**提升模块转换阶段**)
 
    ```json
    //npm i --save-dev hard-source-webpack-plugin
@@ -1525,9 +1525,10 @@ rules:{
 减少文件搜索范围
 
 ```json
-//resolve.modules设置
-//resolve.mainFields配置
-//resolve.extensions配置
+//resolve.modules设置,减少模块搜索层级
+//resolve.mainFields配置，入口文件一般是main.js文件
+//resolve.extensions配置，模块查找文件的类型
+
 //合理使用alias
    resolve: {
         alias: {
