@@ -1522,7 +1522,9 @@ rules:{
 }
 ```
 
-减少文件搜索范围
+## 减少文件搜索范围
+
+resolve字段，子模块查找配置
 
 ```json
 //resolve.modules设置,减少模块搜索层级
@@ -1543,12 +1545,12 @@ rules:{
 
 ## 图片压缩
 
-要求： 基于 Node 库的 imagemin 或者 tinypng API  
+要求： 基于 Node 库的 **imagemin** 或者 **tinypng** API  
 
 - Imagemin的优点分析  
-  - 支持定制选项
-  - 第三方优化插件pngquant
-  - 可以处理多种图片格式
+  - 支持**定制选项**
+  - 第三方**优化插件pngquan**t
+  - 可以**处理多种图片**格式
 
 使用： 配置 image-webpack-loader  
 
@@ -1587,14 +1589,16 @@ rules: [{
 
 ## 擦出无用CSS
 
-PurifyCSS: 遍历代码， 识别已经用到的 CSS class  
+**PurifyCSS**: 遍历代码， 识别已经用到的 CSS class  
 
 ```json
 // npm i purgecss-webpack-plugin -D
 //和 mini-css-extract-plugin 配合使用
+
+
 ```
 
-uncss: HTML 需要通过 jsdom 加载， 所有的样式通过PostCSS解析， 通过document.querySelector 来识别在 html 文件里面不存在的选择器  
+
 
 ```json
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -1624,6 +1628,10 @@ plugins:[
         })
 ]
 ```
+
+**uncss**: 
+
+​		要求2个：HTML 需要通过 jsdom 加载， 所有的样式通过**PostCSS**解析， 通过document.querySelector 来识别在 html 文件里面不存在的选择器  
 
 ## 构建体积优化： 动态 Polyfill  
 
