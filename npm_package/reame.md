@@ -58,3 +58,7 @@ JS时间格式转换
 在浏览器中，复制内容到剪贴板
 
 [npm](https://github.com/feross/clipboard-copy)
+
+# vite
+下一代前端开发与构建工具
+[npm](https://github.com/vitejs/docs-cn)
