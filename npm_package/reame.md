@@ -54,3 +54,7 @@ JS时间格式转换
 
 [npm](https://npm.anvaka.com/)
 
+# clipboard-copy
+在浏览器中，复制内容到剪贴板
+
+[npm](https://github.com/feross/clipboard-copy)
