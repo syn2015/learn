@@ -38,8 +38,14 @@ JS时间格式转换
 
 # inspx
 支持开发模式下显示元素的位置、尺寸信息，“像素完美”强迫症必备
+
 [npm](https://github.com/raunofreiberg/inspx)
 
+# code to graph
+
+根据js代码自动生成逻辑图，逻辑图由 mermaid 书写
+
+[npm](https://github.com/crubier/code-to-graph)
 
 
  
