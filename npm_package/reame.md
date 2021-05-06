@@ -36,7 +36,9 @@ JS时间格式转换
 
 [npm](https://www.npmjs.com/package/glob)
 
-
+# inspx
+支持开发模式下显示元素的位置、尺寸信息，“像素完美”强迫症必备
+[npm](https://github.com/raunofreiberg/inspx)
 
 
 
