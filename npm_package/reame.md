@@ -48,5 +48,9 @@ JS时间格式转换
 [npm](https://github.com/crubier/code-to-graph)
 
 
- 
+ # https://npm.anvaka.com/
+
+图解动画演示某一个 npm package 所有依赖，已开源 anvaka/npmgraph，技术栈 angular.js、browserify 与 gulp
+
+[npm](https://npm.anvaka.com/)
 
