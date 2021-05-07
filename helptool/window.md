@@ -5,7 +5,7 @@
 # v two ray和clash
 # 天若ocr文字识别工具
 # USB Safely Remove USB 安全移除工具
-# 强制解除文件锁定工具
+# IObit Unlocker，解除文件锁定工具
 # Revo Uninstaller Pro 软件卸载工具
 # CCleaner 中文版 
 # SpaceSniffer 查找大文件工具
