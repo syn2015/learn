@@ -23,3 +23,4 @@
 # PotPlayer 视频播放
 # IDM UEStudio 文本编辑
 # YouTube（YDL-UI，Mass-TuBe，4K Video Downloader，mediahuman ）
+# 右键管理（RightMenuMgr，ContextMenuManager.NET.4.0）
