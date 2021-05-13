@@ -115,6 +115,9 @@ Moment.js 的 2kB 轻量化方案
 [npm](https://)
 
 # webpackbar
-[npm](https://)
+
+webpack4添加打包/启动进度条
+
+[npm](https://github.com/unjs/webpackbar)
 
 
