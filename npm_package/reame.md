@@ -120,4 +120,15 @@ webpack4添加打包/启动进度条
 
 [npm](https://github.com/unjs/webpackbar)
 
+# animate
+
+使用CSS3的animation制作的动画效果的CSS集合
+
+[npm](https://github.com/animate-css/animate.css)
+
+# vue-lazyload
+
+图片懒加载
+
+[github](https://github.com/hilongjw/vue-lazyload)
 
