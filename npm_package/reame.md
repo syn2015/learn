@@ -132,3 +132,8 @@ webpack4添加打包/启动进度条
 
 [github](https://github.com/hilongjw/vue-lazyload)
 
+# ip
+
+专门用来处理IP地址的库：ip，ip库能够获取本机IP地址、比较、转换、掩码/子网计算等各种和网络IP相关的操作：
+
+[github](https://github.com/indutny/node-ip)
