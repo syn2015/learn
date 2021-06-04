@@ -144,3 +144,10 @@ webpack4添加打包/启动进度条
 
 
 [github](https://github.com/banga/git-split-diffs)
+
+# yypkg
+
+yypkg是一个实用的JavaScript工具函数集合，快速处理各种常见的通用性问题。使用极其简单，支持整体引入和模块化引入。
+
+
+[github](https://github.com/yypkg/yypkg)
