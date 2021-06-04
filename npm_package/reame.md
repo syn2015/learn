@@ -137,3 +137,10 @@ webpack4添加打包/启动进度条
 专门用来处理IP地址的库：ip，ip库能够获取本机IP地址、比较、转换、掩码/子网计算等各种和网络IP相关的操作：
 
 [github](https://github.com/indutny/node-ip)
+
+# git-split-diffs 
+
+这个命令行工具可以将代码 diff 显示为类似 GitHub 的样子。
+
+
+[github](https://github.com/banga/git-split-diffs)
