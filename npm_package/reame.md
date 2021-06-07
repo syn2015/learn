@@ -152,4 +152,16 @@ yypkg是一个实用的JavaScript工具函数集合，快速处理各种常见�
 
 [github](https://github.com/yypkg/yypkg)
 
+# vue/parser
 
+为 Vue 文件组件生成 JSON 文档。
+
+
+[github](https://github.com/vuedoc/parser)
+
+# vue/md
+
+为Vue组件生成markdown文档。
+
+
+[github](https://github.com/vuedoc/md)
