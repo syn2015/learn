@@ -12,3 +12,6 @@
 # Wifiner_1.3.191_(最低10.10)WIFI信号盲区死角检测工具
 # AnyTrans for IOS (好用的iPhone管理工具)
 # Path Finder 10.1b1 (强大的Finder替代工具) 
+# Folx Pro 5.25  (好用的下载工具
+# PopClip 2021.4  (划词扩展工具) 
+# Paste 3.0.11 (剪切板增强工具) 
