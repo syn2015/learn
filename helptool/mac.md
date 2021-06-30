@@ -10,3 +10,5 @@
 # TG_Pro 2.55 专业Mac硬件温度监控
 # Wifi_Signal_Strength_2.1_(200129)菜单栏实时显示Wifi信号强度
 # Wifiner_1.3.191_(最低10.10)WIFI信号盲区死角检测工具
+# AnyTrans for IOS (好用的iPhone管理工具)
+# Path Finder 10.1b1 (强大的Finder替代工具) 
