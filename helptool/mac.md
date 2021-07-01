@@ -15,3 +15,10 @@
 # Folx Pro 5.25  (好用的下载工具
 # PopClip 2021.4  (划词扩展工具) 
 # Paste 3.0.11 (剪切板增强工具) 
+# Alfred Powerpack 4.3.4 (本地搜索及应用快速启动)
+#  macOS小助手 1.3.1 中文版 (mac常用命令集合) 
+# MacWk Updater 0.4.1 中文版 (MacWk应用更新管理器)
+# Adguard 2.5.3 (好用的广告过滤软件) 
+# Beyond Compare 4.3.7  (文件对比比较神器)
+# AltTab 6.22.1 中文版 (窗口快速切换利器)
+# Macs Fan Control Pro 1.5.9.30  (风扇转速调整及温度监控工具) 
