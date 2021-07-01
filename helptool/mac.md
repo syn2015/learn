@@ -26,3 +26,4 @@
 # Monodraw 1.5  (代码注释必备神器) 
 # Android File Transfer 1.0.12 (1.0.507.1136) 中文版 (Android 文件传输工具) 
 # Free Download Manager 6.14.2 中文版 (非常棒的下载工具) 
+# Network & Battery 12.3.0  (实时网速显示及电池健康)
