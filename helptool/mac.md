@@ -28,3 +28,5 @@
 # Free Download Manager 6.14.2 中文版 (非常棒的下载工具) 
 # Network & Battery 12.3.0  (实时网速显示及电池健康)
 # gSwitch 1.9.7 中文版 (GPU显卡切换工具)
+# SyncSettings 1.2.4  (一键备份应用配置文件)
+# SwitchHosts! 4.0.2 中文版 (mac hosts修改工具)
