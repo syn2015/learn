@@ -165,3 +165,72 @@ yypkg是一个实用的JavaScript工具函数集合，快速处理各种常见�
 
 
 [github](https://github.com/vuedoc/md)
+
+# browserslist
+
+Browserslist 是一个前端项目配置工具，功能是在前端工具之间共享目标环境的浏览器信息
+
+
+# flyio
+
+一个支持所有JavaScript运行环境的基于Promise的、支持请求转发、强大的http请求库。可以让您在多个端上尽可能大限度的实现代码复用。
+
+[npm](https://www.npmjs.com/package/flyio)
+
+# jweixin-module
+
+微信JS-SDK
+
+[npm](https://www.npmjs.com/package/jweixin-module)
+
+# md5
+MD5加密
+
+[npm](https://www.npmjs.com/package/md5)
+
+# node-sass
+
+# regenerator-runtime
+
+regenerator-runtime模块来自facebook的regenerator模块,主要作用是生成器函数、async、await函数经babel编译后，regenerator-runtime模块用于提供功能实现
+
+[npm](https://www.npmjs.com/package/regenerator-runtime)
+
+# sass-loader
+
+# vuex-persistedstate
+
+vue持久化插件
+
+[npm](https://www.npmjs.com/package/vuex-persistedstate)
+
+# babel-plugin-import
+
+组件库按需加载借助babel-plugin-import实现
+
+[npm](https://www.npmjs.com/package/babel-plugin-import)
+
+# mini-types
+
+支付宝小程序 TypeScript 声明文件。
+
+[npm](https://www.npmjs.com/package/mini-types)
+
+# miniprogram-api-typings
+
+微信小程序定义文件
+[npm](https://www.npmjs.com/package/miniprogram-api-typings)
+
+# postcss-comment
+
+允许 postcss 支持内联注释。
+
+[npm](https://www.npmjs.com/package/postcss-comment)
+
+# vue-template-compiler
+
+这个包是自动生成的，请参阅 https://github.com/vuejs/vue/blob/dev/src/platforms/web/entry-compiler.js
+这个包可用于将Vue 2.0模板预编译为呈现函数，以避免运行时编译开销和CSP限制。在大多数情况下，应该将它与vue-loader一起使用，只有在编写具有非常特定需求的构建工具时才会单独使用它。
+在 vue 工程中，安装依赖时，需要 vue 和 vue-template-compiler 版本必须保持一致
+
+[npm](https://www.npmjs.com/package/vue-template-compiler)
