@@ -43,3 +43,4 @@
 # TechTool Pro 14.0.1  (强悍的mac测试及维护工具)
 # Listen1 2.21.5 中文版 (全网付费VIP音乐免费听) 
 # Sensei 1.4.6 (88) (新一代性能优化清理工具)
+# spy-debugger 微信网页调试
