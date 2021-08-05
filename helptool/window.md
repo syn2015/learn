@@ -26,3 +26,5 @@
 # 右键管理（RightMenuMgr，ContextMenuManager.NET.4.0）
 # 防火墙Evorim Free Firewall
 # 图片压缩Squoosh
+# BLISK – 专为开发者设计的浏览器，同屏同步预览不同设备的显示效果，支持 50+ 款设备
+[web](https://blisk.io/#DownloadBliskModal)
