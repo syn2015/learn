@@ -234,3 +234,5 @@ vue持久化插件
 在 vue 工程中，安装依赖时，需要 vue 和 vue-template-compiler 版本必须保持一致
 
 [npm](https://www.npmjs.com/package/vue-template-compiler)
+
+# Holder 能在浏览器中利用 SVG 渲染图像占位符。
