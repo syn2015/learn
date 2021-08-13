@@ -28,3 +28,5 @@
 # 图片压缩Squoosh
 # BLISK – 专为开发者设计的浏览器，同屏同步预览不同设备的显示效果，支持 50+ 款设备
 [web](https://blisk.io/#DownloadBliskModal)
+# cropperJS图片裁剪工具
+[npm](https://github.com/fengyuanchen/cropperjs)
