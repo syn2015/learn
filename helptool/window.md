@@ -30,3 +30,4 @@
 [web](https://blisk.io/#DownloadBliskModal)
 # cropperJS图片裁剪工具
 [npm](https://github.com/fengyuanchen/cropperjs)
+# [networkmanager](https://borntoberoot.net/NETworkManager/Download)
