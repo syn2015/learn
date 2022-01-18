@@ -236,3 +236,8 @@ vue持久化插件
 [npm](https://www.npmjs.com/package/vue-template-compiler)
 
 # Holder 能在浏览器中利用 SVG 渲染图像占位符。
+
+[npm](https://www.npmjs.com/package/placeholder.js)
+
+# 赫蹏是专为中文网页内容设计的排版样式增强
+[npm](https://github.com/sivan/heti)
