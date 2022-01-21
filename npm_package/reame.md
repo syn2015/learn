@@ -241,3 +241,6 @@ vue持久化插件
 
 # 赫蹏是专为中文网页内容设计的排版样式增强
 [npm](https://github.com/sivan/heti)
+
+# 针对手机网页的前端开发者调试面板。
+[github](https://github.com/Tencent/vConsole/blob/dev/README_CN.md)
