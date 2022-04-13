@@ -260,3 +260,6 @@ vue持久化插件
 # vue-cropper 图片剪裁
 [github](https://github.com/xyxiao001/vue-cropper)
 
+# svgo 用于压缩SVG文件
+
+[github](https://github.com/svg/svgo)
