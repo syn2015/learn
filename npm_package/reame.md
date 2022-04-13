@@ -79,8 +79,8 @@ Moment.js 的 2kB 轻量化方案
 # loadsh
 [npm](https://)
 
-# nprogress
-[npm](https://)
+# nprogress 页面加载用进度条
+[github](https://github.com/rstacruz/nprogress)
 
 # qs
 [npm](https://)
@@ -107,9 +107,9 @@ Moment.js 的 2kB 轻量化方案
 # plop
 [npm](https://)
 
-# prettier
+# prettier 代码格式化工具
 
-[npm](https://)
+[github](https://github.com/prettier/prettier)
 
 # svg-sprite-loader
 [npm](https://)
@@ -244,3 +244,19 @@ vue持久化插件
 
 # 针对手机网页的前端开发者调试面板。
 [github](https://github.com/Tencent/vConsole/blob/dev/README_CN.md)
+
+# fuse.js前端模糊查询
+
+[github](https://github.com/krisk/Fuse)
+
+# normalize.css 磨平浏览器html差异
+
+[github](https://github.com/necolas/normalize.css)
+
+# path-to-regexp 可用于路由的解析。它可以把/user/:name之类的字符串转化为一个常规的正则表达式。
+
+[github](https://github.com/pillarjs/path-to-regexp)
+
+# vue-cropper 图片剪裁
+[github](https://github.com/xyxiao001/vue-cropper)
+
