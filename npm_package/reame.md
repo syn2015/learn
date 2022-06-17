@@ -263,3 +263,10 @@ vue持久化插件
 # svgo 用于压缩SVG文件
 
 [github](https://github.com/svg/svgo)
+
+# Eruda 是一个专为前端移动端、移动端设计的调试面板
+[github](https://github.com/liriliri/eruda)
+
+# mescroll -- 精致的下拉刷新和上拉加载js框架 (JS framework for pull-refresh and pull-up-loading)
+[github](https://github.com/liriliri/eruda](https://github.com/mescroll/mescroll))
+
