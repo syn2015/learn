@@ -272,3 +272,17 @@ vue持久化插件
 
 # 小巧轻量级的移动端手势库
 [github](https://github.com/AlloyTeam/AlloyFinger)
+
+# web/h5/移动端PDF预览插件
+[github](https://github.com/gjTool/pdfh5)
+
+# vue-esign签字板,鼠标写名,支持PC\移动端,返回base64或者file格式的文件流
+[github](https://github.com/JaimeCheng/vue-esign)
+
+# 一个页面导航库，记录路由并缓存页面，像原生APP导航一样。
+[github](https://github.com/zack24q/vue-navigation)
+
+# 模拟阻止（适用于PC，移动端）：在需要阻止浏览器返回上一页的页面使用次插件，当点击浏览器返回上一页时使页面不做任何变化。
+[github](https://github.com/WangMaoling/vue-prevent-browser-back)
+
+
