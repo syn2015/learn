@@ -270,3 +270,5 @@ vue持久化插件
 # mescroll -- 精致的下拉刷新和上拉加载js框架 (JS framework for pull-refresh and pull-up-loading)
 [github](https://github.com/liriliri/eruda](https://github.com/mescroll/mescroll))
 
+# 小巧轻量级的移动端手势库
+[github](https://github.com/AlloyTeam/AlloyFinger)
